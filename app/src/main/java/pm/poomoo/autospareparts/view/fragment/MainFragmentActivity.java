@@ -198,7 +198,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
                 finish();
                 return true;
             }
-            showToast("在按一次退出");
+            showToast("再按一次退出");
             mTime = time;
         }
         return true;
