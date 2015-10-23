@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/about_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_head" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:contentDescription="@null"
+                android:src="@drawable/icon" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/software_explain_background"
+                android:padding="10dp"
+                android:text="贵阳汽配手册APP，具有查询贵阳汽配供应商信息的功能，为广大汽车修理厂提供方便快捷的查询服务。\t\t主页“找配件”能通过关键字进行模糊查询，可查询所有车型配件供应商。以也可进入各车系进行专项搜索，能查询对应车系配件供应商。\t\t汽车修理厂可在“供求发布”功能里面发布需要采购的零配件，审核通过后可以在信息中心查看，以便汽配供应商主动联系。\t\t请在WIFI条件下，到“更多－数据下载”，下载最新数据，供离线查询使用，节省流量，查询更快。"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

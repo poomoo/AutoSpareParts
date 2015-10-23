@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/two_head"
+        layout="@layout/activity_head" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/two_head"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/client_list_linear_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/search_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="6dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:src="@drawable/search_icon" />
+
+            <EditText
+                android:id="@+id/client_list_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="#0000"
+                android:hint="请输入车型或商品名称"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <pm.poomoo.autospareparts.util.RefreshableView
+            android:id="@+id/frag_two_list_refreshable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/frag_two_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFF"
+                android:cacheColorHint="#0000"
+                android:listSelector="#0000"
+                android:scrollbars="none" />
+        </pm.poomoo.autospareparts.util.RefreshableView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/frag_two_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/two_head"
+        android:background="#FFFF"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="你不是VIP用户，不能查看用户信息" />
+    </LinearLayout>
+
+</RelativeLayout>

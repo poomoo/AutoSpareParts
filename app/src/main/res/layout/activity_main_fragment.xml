@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <!--底部栏-->
+    <pm.poomoo.autospareparts.util.BottomBar
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <!--主页-->
+    <RelativeLayout
+        android:id="@+id/fragment_relative_layout_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar" />
+    <!--客户资料-->
+    <RelativeLayout
+        android:id="@+id/fragment_relative_layout_two"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar"
+        android:visibility="gone" />
+    <!--分享-->
+    <RelativeLayout
+        android:id="@+id/fragment_relative_layout_three"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar"
+        android:visibility="gone" />
+    <!--更多-->
+    <RelativeLayout
+        android:id="@+id/fragment_relative_layout_five"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/fragment_relative_layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomBar"
+        android:background="#a3bab8b9"
+        android:visibility="gone">
+
+        <include
+            android:id="@+id/head"
+            layout="@layout/activity_head" />
+
+        <LinearLayout
+            android:id="@+id/fragment_relative_layout_linear_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/head"
+            android:layout_margin="10dp"
+            android:background="@drawable/search_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="6dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="6dp">
+
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_icon" />
+
+            <EditText
+                android:id="@+id/fragment_relative_layout_edt_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:background="#0000"
+                android:hint="请输入车型或商品名称"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!--搜索按钮-->
+    <LinearLayout
+        android:id="@+id/main_fragment_linear_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/btn_bottom_search_background"
+        android:gravity="bottom|center"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="找配件"
+            android:textColor="#FFF"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

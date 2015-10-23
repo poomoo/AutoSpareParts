@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="transparent">#00000000</color>
+	<color name="green">#FF009900</color>
+	<color name="dark_gray">#FF666666</color>
+	<color name="gray">#FF818181</color>
+	<color name="light_gray">#FFd9d9d9</color>
+	<color name="black">#ff000000</color>
+	<color name="DeepGrey">#FF404040</color>
+	<color name="white">#FFFFFFFF</color>
+	<color name="set">#ff78736d</color>
+	<color name="red">#ffff0000</color>
+	<color name="blue">#ff3399ff</color>
+	<color name="whiteSmoke">#fff5f5f5</color>
+
+    <color name="linear">#21876766</color>
+
+</resources>

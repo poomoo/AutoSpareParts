@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_head" />
+
+    <pm.poomoo.autospareparts.util.PmGlide
+        android:id="@+id/company_list_glide"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="#FFFF" />
+
+    <LinearLayout
+        android:id="@+id/company_list_linear_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/search_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="6dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search_icon" />
+
+        <EditText
+            android:id="@+id/company_list_search_company"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:background="#0000"
+            android:hint="请输入车型或商品名称"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <pm.poomoo.autospareparts.util.RefreshableView
+            android:id="@+id/company_list_refreshable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/company_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFF"
+                android:listSelector="#0000"
+                android:scrollbars="none" />
+        </pm.poomoo.autospareparts.util.RefreshableView>
+
+        <ImageView
+            android:id="@+id/company_list_add_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/add_more" />
+    </RelativeLayout>
+</LinearLayout>

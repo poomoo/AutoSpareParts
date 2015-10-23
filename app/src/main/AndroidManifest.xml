@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pm.poomoo.autospareparts">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- 分享 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- <uses-permission android:name="android.permission.INTERNET" /> -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <application
+        android:name=".base.PmApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".view.activity.start.StartActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.fragment.MainFragmentActivity" />
+        <activity android:name=".view.activity.company.CompanyListActivity" />
+        <activity android:name=".view.activity.company.CompanyInformationActivity" />
+        <activity android:name=".view.activity.client.ClientInformationActivity" />
+        <activity android:name=".view.activity.start.LogActivity" />
+        <activity android:name=".view.activity.start.RegisterActivity" />
+        <activity android:name=".view.activity.start.CompleteClientInformationActivity" />
+        <activity android:name=".view.activity.more.MyCollectActivity" />
+        <activity android:name=".view.activity.more.MyMessageActivity" />
+        <activity android:name=".view.activity.more.AboutMeActivity" />
+        <activity android:name=".view.activity.more.SoftwareExplainActivity" />
+        <activity android:name=".view.activity.more.FeedbackActivity" />
+        <activity android:name=".view.activity.search.SearchCompanyActivity" />
+        <activity android:name=".view.activity.search.SearchAccessoriesActivity" />
+        <activity android:name=".view.activity.start.ForgetPasswordActivity" />
+        <activity android:name=".view.activity.more.collect.CollectFragmentActivity" />
+        <activity android:name=".view.activity.more.MyMessageInfoActivity" />
+        <activity android:name=".view.activity.more.RequirementActivity" />
+
+        <!-- 分享 -->
+        <activity
+            android:name="cn.sharesdk.framework.ShareSDKUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- <data android:scheme="101126856" /> -->
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
