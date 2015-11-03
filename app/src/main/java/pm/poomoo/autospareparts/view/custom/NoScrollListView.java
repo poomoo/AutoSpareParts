@@ -7,8 +7,8 @@ import android.widget.ListView;
 
 /**
  * Created by Android_PM on 2015/11/3.
- * 自定义的listview——用在显示帖子详情的图片集合
- * 解决的问题：GridView显示不全，只显示了一行的图片，比较奇怪，尝试重写GridView来解决
+ * 自定义的listview——用于嵌套在scrollview中
+ * 解决的问题：ListView显示不全，只显示了一行，重写ListView来解决
  */
 public class NoScrollListView extends ListView {
     public NoScrollListView(Context context) {
