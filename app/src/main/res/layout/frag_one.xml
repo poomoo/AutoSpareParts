@@ -33,8 +33,21 @@
                     android:orientation="vertical" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#EAEAEA"
+                    android:padding="8dp"
+                    android:text="信息标题"
+                    android:textSize="20sp" />
+
+                <ListView
+                    android:id="@+id/frag_one_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
         </ScrollView>
     </pm.poomoo.autospareparts.util.pullDownScrollView.PullDownScrollView>

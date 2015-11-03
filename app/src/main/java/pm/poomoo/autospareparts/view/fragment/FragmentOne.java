@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
-import com.lidroid.xutils.exception.DbException;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
@@ -55,11 +58,17 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     private PmGlide mGlide;//广告控件
     @ViewInject(R.id.frag_one_linear)
     private LinearLayout mLinearLayout;//加载子视图控件
+    @ViewInject(R.id.frag_one_listview)
+    private ListView mListView;//供求发布展示
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");//下拉时间格式
     private int mTypePicWidth = 0;//图片宽
     private int mTypePicHeight = 0;//图片高
     private List<CompanyInfo> advertisement = new ArrayList<CompanyInfo>();//广告
+    private ListViewAdapter adapter = null;
+    private BitmapUtils bitmapUtils;
+    private String[] Utrls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +99,8 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         PmApplication.getInstance().getTypeInfos().clear();
         getAdvertisement();//获取广告列表
         getTypeList(false);//获取类型
+        adapter = new ListViewAdapter(getActivity());
+        mListView.setAdapter(adapter);
 
         //初始化广告
         ViewGroup.LayoutParams params = mGlide.getLayoutParams();
@@ -261,6 +272,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         });
     }
 
+
     /**
      * 获取类型接口
      */
@@ -302,7 +314,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                             }
                             break;
                         case RET_FAIL:
-                        break;
+                            break;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -315,9 +327,171 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         });
     }
 
+    /**
+     * 获取供求列表
+     */
+    public void getSupplyInformation() {
+        RequestParams params = new RequestParams();
+        final JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(KEY_PACKNAME, 1001);
+            jsonObject.put("adver_type", 0);
+            params.addBodyParameter(KEY, jsonObject.toString());
+            showLog(TAG, jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    showLog(TAG, responseInfo.result);
+                    JSONObject result = new JSONObject(responseInfo.result);
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            advertisement.clear();
+                            mGlide.stopAnimation();
+                            JSONArray array = result.getJSONArray(KEY_LIST);
+                            if (array.length() > 0) {
+                                String[] glide = new String[array.length()];
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = new JSONObject(array.get(i).toString());
+                                    glide[i] = PIC_RUL + object.getString("ads_pic").substring(2);
+                                    showLog(TAG, glide[i]);
+                                    advertisement.add(new CompanyInfo(object.getInt("id"), 0, object.getString("name"), object.getString("description"),
+                                            object.getString("pic"), object.getString("cellphone"), object.getString("landline"), object.getString("fax"), object.getString("qq"),
+                                            object.getString("email"), "", 0, object.getString("people"), object.getString("wechat")));
+                                }
+                                mGlide.initPic(glide, getActivity());
+                                mGlide.startAnimation();
+                            } else mGlide.setVisibility(View.GONE);
+                            break;
+                        case RET_FAIL:
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mGlide.stopAnimation();
+    }
+
+    /**
+     * 适配器
+     */
+    public class ListViewAdapter extends BaseAdapter {
+
+        private LayoutInflater inflater;
+
+        public ListViewAdapter(Context context) {
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            HolderView holderView;
+            if (convertView == null) {
+                holderView = new HolderView();
+                convertView = inflater.inflate(R.layout.item_for_supply, null);
+                holderView.name = (TextView) convertView.findViewById(R.id.item_for_supply_name);
+                holderView.dateTime = (TextView) convertView.findViewById(R.id.item_for_supply_dateTime);
+                holderView.content = (TextView) convertView.findViewById(R.id.item_for_supply_content);
+                holderView.gridView = (GridView) convertView.findViewById(R.id.item_for_supply_gridview);
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
+            holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Utrls));
+
+            return convertView;
+        }
+
+        class HolderView {
+            public TextView name;
+            public TextView dateTime;
+            public TextView content;
+            public GridView gridView;
+        }
+    }
+
+    /**
+     * 适配器
+     */
+    public class GridViewAdapter extends BaseAdapter {
+
+        private LayoutInflater inflater;
+        private String[] Urls;
+
+        public GridViewAdapter(Context context, String[] Urls) {
+            inflater = LayoutInflater.from(context);
+            this.Urls = Urls;
+
+            if (bitmapUtils == null) {
+                bitmapUtils = new BitmapUtils(getActivity());
+                bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return Urls == null ? 0 : Urls.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return Urls[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            HolderView holderView;
+            if (convertView == null) {
+                holderView = new HolderView();
+                convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
+                holderView.imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
+
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
+            bitmapUtils.display(holderView.imageView, Urls[position]);
+            return convertView;
+        }
+
+        class HolderView {
+            public ImageView imageView;
+        }
     }
 }

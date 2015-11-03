@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/item_for_supply_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="爱车群体"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/item_for_supply_dateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2015-11-03 10:15"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="5dp" />
+
+    <TextView
+        android:id="@+id/item_for_supply_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="供应：汽车脚垫适用于新福克斯迈腾朗逸途观科鲁兹速腾帕萨特"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="5dp" />
+
+    <pm.poomoo.autospareparts.view.custom.NoScrollGridView
+        android:id="@+id/item_for_supply_gridview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:verticalSpacing="2dp"
+        android:numColumns="3"
+        android:stretchMode="columnWidth" />
+</LinearLayout>
