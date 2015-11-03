@@ -44,10 +44,10 @@
                     android:text="信息标题"
                     android:textSize="20sp" />
 
-                <ListView
+                <pm.poomoo.autospareparts.view.custom.NoScrollListView
                     android:id="@+id/frag_one_listview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </ScrollView>
     </pm.poomoo.autospareparts.util.pullDownScrollView.PullDownScrollView>

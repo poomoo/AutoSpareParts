@@ -3,6 +3,7 @@ package pm.poomoo.autospareparts.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -401,7 +403,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
         @Override
         public int getCount() {
-            return 3;
+            return Utrls.length;
         }
 
         @Override
@@ -416,6 +418,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            Log.i("getview", position + "");
             HolderView holderView;
             if (convertView == null) {
                 holderView = new HolderView();
@@ -494,4 +497,5 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
             public ImageView imageView;
         }
     }
+
 }
