@@ -49,6 +49,7 @@
         <activity android:name=".view.activity.more.collect.CollectFragmentActivity" />
         <activity android:name=".view.activity.more.MyMessageInfoActivity" />
         <activity android:name=".view.activity.more.RequirementActivity" />
+        <activity android:name=".view.activity.SupplyInformationActivity" />
 
         <!-- 分享 -->
         <activity

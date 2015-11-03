@@ -7,11 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,6 +42,7 @@ import pm.poomoo.autospareparts.mode.TypeInfo;
 import pm.poomoo.autospareparts.util.PmGlide;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownElasticImp;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownScrollView;
+import pm.poomoo.autospareparts.view.activity.SupplyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
 
@@ -51,7 +52,7 @@ import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
  *
  * @author AADC
  */
-public class FragmentOne extends PmBaseFragment implements PullDownScrollView.RefreshListener {
+public class FragmentOne extends PmBaseFragment implements PullDownScrollView.RefreshListener, AdapterView.OnItemClickListener {
 
     private final String TAG = FragmentOne.class.getSimpleName();
     @ViewInject(R.id.frag_one_pull_scroll_view)
@@ -103,6 +104,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         getTypeList(false);//获取类型
         adapter = new ListViewAdapter(getActivity());
         mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(this);
 
         //初始化广告
         ViewGroup.LayoutParams params = mGlide.getLayoutParams();
@@ -388,6 +390,13 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     public void onDestroyView() {
         super.onDestroyView();
         mGlide.stopAnimation();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.i(TAG, "onItemClick");
+        startActivity(new Intent(getActivity(), SupplyInformationActivity.class));
+        getActivityInFromRight();
     }
 
     /**
