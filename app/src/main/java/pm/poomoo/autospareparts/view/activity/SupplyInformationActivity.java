@@ -19,12 +19,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,16 +52,25 @@ public class SupplyInformationActivity extends PmBaseActivity {
     private GridView gridView;
     @ViewInject(R.id.activity_supply_information_listView)
     private ListView listView;
-    @ViewInject(R.id.activity_supply_information_editText)
-    private EditText editText;
-    @ViewInject(R.id.activity_supply_information_btn)
-    private Button button;
+    @ViewInject(R.id.activity_supply_information_editText_comment)
+    private EditText editText_comment;
+    @ViewInject(R.id.activity_supply_information_btn_comment)
+    private Button button_comment;
+    @ViewInject(R.id.activity_supply_information_editText_reply)
+    private EditText editText_reply;
+    @ViewInject(R.id.activity_supply_information_btn_reply)
+    private Button button_reply;
+    @ViewInject(R.id.activity_supply_information_layout_reply)
+    private RelativeLayout reply_layout;
+    @ViewInject(R.id.activity_supply_information_layout_comment)
+    private LinearLayout comment_layout;
 
 
     private BitmapUtils bitmapUtils;
     private List<ReplyInfo> replyInfos = null;
-    private String name = "跑马科技", dateTime = "2015-11-03 15:21", content = "测试";
+    private String name = "跑马科技", dateTime = "2015-11-03 15:21", content = "测试", commentName = "";
     private String[] Utrls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
+    private ReplyAdapter replyAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +104,70 @@ public class SupplyInformationActivity extends PmBaseActivity {
         replyInfos = new ArrayList<ReplyInfo>();
         ReplyInfo replyInfo = new ReplyInfo();
         replyInfo.setCommentName("贵阳汽配");
-        replyInfo.setReplyName("");
-        replyInfo.setReplayContent("你好吗？");
+        replyInfo.setReplyContent("你好吗？");
         replyInfos.add(replyInfo);
         replyInfo = new ReplyInfo();
         replyInfo.setCommentName("贵阳汽配");
         replyInfo.setReplyName("跑马科技");
-        replyInfo.setReplayContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
+        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
+        replyInfos.add(replyInfo);
+        replyInfo = new ReplyInfo();
+        replyInfo.setCommentName("贵阳汽配");
+        replyInfo.setReplyName("跑马科技");
+        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
         replyInfos.add(replyInfo);
 
-        listView.setAdapter(new ReplyAdapter(this, replyInfos));
+        replyAdapter = new ReplyAdapter(this, replyInfos);
+        listView.setAdapter(replyAdapter);
+
+        reply_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (reply_layout.getVisibility() == View.VISIBLE) {
+                    reply_layout.setVisibility(View.GONE);
+                }
+                if (comment_layout.getVisibility() == View.INVISIBLE)
+                    comment_layout.setVisibility(View.VISIBLE);
+                //隐藏键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
+    }
+
+    @OnClick({R.id.activity_supply_information_btn_comment, R.id.activity_supply_information_btn_reply})
+    public void setOnClickListener(View view) {
+        switch (view.getId()) {
+            case R.id.activity_supply_information_btn_comment:
+                ReplyInfo replyInfo = new ReplyInfo();
+                replyInfo.setCommentName("安卓");
+                replyInfo.setReplyName("");
+                replyInfo.setReplyContent(editText_comment.getText().toString().trim());
+                replyInfos.add(replyInfo);
+                replyAdapter.notifyDataSetChanged();
+                editText_comment.setText("");
+                Toast.makeText(SupplyInformationActivity.this, "留言成功", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.activity_supply_information_btn_reply:
+                replyInfo = new ReplyInfo();
+                Log.i("lmf", "commentName:"+commentName);
+                replyInfo.setCommentName(commentName);
+                replyInfo.setReplyName("安卓");
+                replyInfo.setReplyContent(editText_reply.getText().toString().trim());
+                replyInfos.add(replyInfo);
+                replyAdapter.notifyDataSetChanged();
+                editText_reply.setText("");
+                if (reply_layout.getVisibility() == View.VISIBLE)
+                    reply_layout.setVisibility(View.GONE);
+                if (comment_layout.getVisibility() == View.INVISIBLE)
+                    comment_layout.setVisibility(View.VISIBLE);
+                //隐藏键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                Toast.makeText(SupplyInformationActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 
     /**
@@ -163,15 +230,11 @@ public class SupplyInformationActivity extends PmBaseActivity {
         private LayoutInflater inflater;
         private TextView replyContent;
         private SpannableString ss;
-        private Context context;
         private String replyName;
-        private String commentName;
         private String replyContentStr;
-        private boolean isComment;//true-单独评论 false-回复评论
 
         public ReplyAdapter(Context context, List<ReplyInfo> list) {
             this.list = list;
-            this.context = context;
             inflater = LayoutInflater.from(context);
         }
 
@@ -199,7 +262,7 @@ public class SupplyInformationActivity extends PmBaseActivity {
 
             replyName = replyInfo.getReplyName();
             commentName = replyInfo.getCommentName();
-            replyContentStr = replyInfo.getReplayContent();
+            replyContentStr = replyInfo.getReplyContent();
             //用来标识在 Span 范围内的文本前后输入新的字符时是否把它们也应用这个效果
             //Spanned.SPAN_EXCLUSIVE_EXCLUSIVE(前后都不包括)
             //Spanned.SPAN_INCLUSIVE_EXCLUSIVE(前面包括，后面不包括)
@@ -209,7 +272,6 @@ public class SupplyInformationActivity extends PmBaseActivity {
                 ss = new SpannableString(commentName + ":" + replyContentStr);
                 ss.setSpan(new ForegroundColorSpan(Color.RED), 0,
                         commentName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                isComment = true;
             } else {
                 ss = new SpannableString(replyName + "回复" + commentName
                         + "：" + replyContentStr);
@@ -217,36 +279,36 @@ public class SupplyInformationActivity extends PmBaseActivity {
                         replyName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 ss.setSpan(new ForegroundColorSpan(Color.RED), replyName.length() + 2,
                         replyName.length() + commentName.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                isComment = false;
+                commentName = replyName;
             }
-            Log.i("replyName", replyName + "----" + isComment);
-            //为回复的人昵称添加点击事件
-//            ss.setSpan(new TextSpanClick(true), 0,
-//                    replyNickName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            //为评论的人的添加点击事件
-//            ss.setSpan(new TextSpanClick(false), replyNickName.length() + 2,
-//                    replyNickName.length() + commentNickName.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             replyContent.setText(ss);
             //添加点击事件时，必须设置
             replyContent.setMovementMethod(LinkMovementMethod.getInstance());
-            replyContent.setOnClickListener(new TextClick());
+            replyContent.setOnClickListener(new TextClick(commentName));
             return convertView;
         }
 
         private final class TextClick implements View.OnClickListener {
+            private String name;
+
+            public TextClick(String name) {
+                super();
+                this.name = name;
+            }
 
             @Override
             public void onClick(View v) {
-                if (isComment)
-                    editText.setHint("@" + commentName);
-                else
-                    editText.setHint("@" + replyName);
-                editText.setHintTextColor(Color.GRAY);
-                editText.setFocusable(true);
-                editText.requestFocus();
+                Log.i("lmf", "name:" + this.name);
+                reply_layout.setVisibility(View.VISIBLE);
+                comment_layout.setVisibility(View.INVISIBLE);
+                editText_reply.setHint("@" + this.name);
+                commentName=this.name;
+                editText_reply.setHintTextColor(Color.GRAY);
+                editText_reply.setFocusable(true);
+                editText_reply.requestFocus();
                 InputMethodManager inputManager =
-                        (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.showSoftInput(editText, 0);
+                        (InputMethodManager) editText_reply.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(editText_reply, 0);
             }
         }
 

@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:descendantFocusability="blocksDescendants">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/item_for_supply_name"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:verticalSpacing="2dp"
         android:numColumns="3"
-        android:stretchMode="columnWidth" />
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="2dp" />
 </LinearLayout>

@@ -25,11 +25,11 @@ public class ReplyInfo {
         this.commentName = commentName;
     }
 
-    public String getReplayContent() {
+    public String getReplyContent() {
         return replyContent;
     }
 
-    public void setReplayContent(String replyContent) {
+    public void setReplyContent(String replyContent) {
         this.replyContent = replyContent;
     }
 }

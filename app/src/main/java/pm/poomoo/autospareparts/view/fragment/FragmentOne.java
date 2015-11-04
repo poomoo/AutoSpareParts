@@ -442,6 +442,11 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
             }
             holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Utrls));
 
+            //屏蔽掉gridview的点击事件，保持listview的点击事件
+            holderView.gridView.setClickable(false);
+            holderView.gridView.setPressed(false);
+            holderView.gridView.setEnabled(false);
+
             return convertView;
         }
 
