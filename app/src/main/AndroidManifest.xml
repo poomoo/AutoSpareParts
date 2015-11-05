@@ -50,6 +50,10 @@
         <activity android:name=".view.activity.more.MyMessageInfoActivity" />
         <activity android:name=".view.activity.more.RequirementActivity" />
         <activity android:name=".view.activity.SupplyInformationActivity" />
+        <activity android:name=".view.activity.ShareActivity" />
+        <activity android:name=".view.activity.pics.PhotosActivity" />
+        <activity android:name=".view.activity.pics.ImageGridActivity" />
+        <activity android:name=".view.activity.pics.PhotoActivity" />
 
         <!-- 分享 -->
         <activity
@@ -73,22 +77,22 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="com.tencent.connect.common.AssistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+        <!--        <activity
+                    android:name="com.tencent.connect.common.AssistActivity"
+                    android:screenOrientation="portrait"
+                    android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+                <activity
+                    android:name="com.tencent.tauth.AuthActivity"
+                    android:launchMode="singleTask"
+                    android:noHistory="true">
+                    <intent-filter>
+                        <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- <data android:scheme="101126856" /> -->
-            </intent-filter>
-        </activity>
+                        <category android:name="android.intent.category.DEFAULT" />
+                        <category android:name="android.intent.category.BROWSABLE" />
+                        &lt;!&ndash; <data android:scheme="101126856" /> &ndash;&gt;
+                    </intent-filter>
+                </activity>-->
 
     </application>
 

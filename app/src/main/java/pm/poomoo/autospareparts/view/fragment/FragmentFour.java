@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
+import pm.poomoo.autospareparts.view.activity.ShareActivity;
 import pm.poomoo.autospareparts.view.activity.more.AboutMeActivity;
 import pm.poomoo.autospareparts.view.activity.more.FeedbackActivity;
 import pm.poomoo.autospareparts.view.activity.more.MyMessageActivity;
@@ -81,8 +82,8 @@ public class FragmentFour extends PmBaseFragment {
      *
      * @param view 点击的控件
      */
-    @OnClick({R.id.frag_four_collect, R.id.frag_four_requirement, R.id.frag_four_message, R.id.frag_four_about_me, R.id.frag_four_check_version,
-            R.id.frag_four_data_down, R.id.frag_four_software_explain, R.id.frag_four_register, R.id.frag_four_feedback})
+    @OnClick({R.id.frag_four_collect, R.id.frag_four_share, R.id.frag_four_message, R.id.frag_four_about_me, R.id.frag_four_check_version,
+            R.id.frag_four_data_down, R.id.frag_four_software_explain, R.id.frag_four_register, R.id.frag_four_feedback, R.id.frag_four_alter})
     public void setOnClickListener(View view) {
         switch (view.getId()) {
             case R.id.frag_four_collect:
@@ -90,9 +91,9 @@ public class FragmentFour extends PmBaseFragment {
                 startActivity(new Intent(getActivity(), CollectFragmentActivity.class));
                 getActivityInFromRight();
                 break;
-            case R.id.frag_four_requirement:
+            case R.id.frag_four_share:
                 //供求发布
-                startActivity(new Intent(getActivity(), RequirementActivity.class));
+                startActivity(new Intent(getActivity(), ShareActivity.class));
                 getActivityInFromRight();
                 break;
             case R.id.frag_four_message:
@@ -140,6 +141,11 @@ public class FragmentFour extends PmBaseFragment {
 //                break;
             case R.id.frag_four_feedback:
                 //意见反馈
+                startActivity(new Intent(getActivity(), FeedbackActivity.class));
+                getActivityInFromRight();
+                break;
+            case R.id.frag_four_alter:
+                //信息修改
                 startActivity(new Intent(getActivity(), FeedbackActivity.class));
                 getActivityInFromRight();
                 break;

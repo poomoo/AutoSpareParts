@@ -93,13 +93,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
-            android:src="@drawable/bottom_bar_shared_normal" />
+            android:src="@drawable/bottom_bar_supply_normal" />
 
         <TextView
             android:id="@+id/bottom_txt_four"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="分享软件"
+            android:text="供求发布"
             android:textColor="#FFF"
             android:textSize="12sp" />
     </LinearLayout>

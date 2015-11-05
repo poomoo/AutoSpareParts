@@ -52,7 +52,7 @@
 
                 <!--VIP注册-->
                 <LinearLayout
-                    android:id="@+id/frag_four_requirement"
+                    android:id="@+id/frag_four_share"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -65,12 +65,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="6dp"
-                        android:src="@drawable/requirement" />
+                        android:src="@drawable/share" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="供求发布"
+                        android:text="分享软件"
                         android:textColor="#FFF" />
                 </LinearLayout>
             </LinearLayout>
@@ -281,26 +281,28 @@
 
                 </LinearLayout>
 
-                <!--暂无-->
+                <!--信息修改-->
                 <LinearLayout
+                    android:id="@+id/frag_four_alter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="invisible">
+                    android:visibility="visible">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="6dp"
-                        android:src="@drawable/ic_launcher" />
+                        android:src="@drawable/alter" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="暂无"
+                        android:text="信息修改"
                         android:textColor="#FFF" />
                 </LinearLayout>
             </LinearLayout>

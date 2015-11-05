@@ -88,7 +88,7 @@ public class BottomBar extends LinearLayout implements OnClickListener {
     public void cancelLinearBackground(int number) {
         mImageView[0].setImageResource(R.drawable.bottom_bar_main_normal);
         mImageView[1].setImageResource(R.drawable.bottom_bar_client_normal);
-        mImageView[3].setImageResource(R.drawable.bottom_bar_shared_normal);
+        mImageView[3].setImageResource(R.drawable.bottom_bar_supply_normal);
         mImageView[4].setImageResource(R.drawable.bottom_bar_more_normal);
         switch (number) {
             case 0:
@@ -98,7 +98,7 @@ public class BottomBar extends LinearLayout implements OnClickListener {
                 mImageView[1].setImageResource(R.drawable.bottom_bar_client_down);
                 break;
             case 3:
-                mImageView[3].setImageResource(R.drawable.bottom_bar_shared_down);
+                mImageView[3].setImageResource(R.drawable.bottom_bar_supply_down);
                 break;
             case 4:
                 mImageView[4].setImageResource(R.drawable.bottom_bar_more_down);

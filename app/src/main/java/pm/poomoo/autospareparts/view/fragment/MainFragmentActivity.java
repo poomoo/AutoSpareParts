@@ -76,7 +76,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
         two.replace(R.id.fragment_relative_layout_two, new FragmentTwo());
         two.setTransition(FragmentTransaction.TRANSIT_NONE);
         two.commit();
-        //加载“分享”
+        //加载“供求发布”
         FragmentTransaction three = getSupportFragmentManager().beginTransaction();
         three.replace(R.id.fragment_relative_layout_three, new FragmentThree());
         three.setTransition(FragmentTransaction.TRANSIT_NONE);
