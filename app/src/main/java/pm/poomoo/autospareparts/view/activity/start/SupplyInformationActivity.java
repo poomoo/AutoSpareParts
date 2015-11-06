@@ -1,4 +1,4 @@
-package pm.poomoo.autospareparts.view.activity;
+package pm.poomoo.autospareparts.view.activity.start;
 
 import android.content.Context;
 import android.graphics.Color;

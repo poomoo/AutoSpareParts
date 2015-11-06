@@ -23,11 +23,10 @@ import org.json.JSONObject;
 
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
-import pm.poomoo.autospareparts.view.activity.ShareActivity;
+import pm.poomoo.autospareparts.view.activity.more.ShareActivity;
 import pm.poomoo.autospareparts.view.activity.more.AboutMeActivity;
 import pm.poomoo.autospareparts.view.activity.more.FeedbackActivity;
 import pm.poomoo.autospareparts.view.activity.more.MyMessageActivity;
-import pm.poomoo.autospareparts.view.activity.more.RequirementActivity;
 import pm.poomoo.autospareparts.view.activity.more.SoftwareExplainActivity;
 import pm.poomoo.autospareparts.view.activity.more.collect.CollectFragmentActivity;
 import pm.poomoo.autospareparts.view.activity.start.LogActivity;

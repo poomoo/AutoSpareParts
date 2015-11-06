@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ECECEC"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/client_information_head"
+        layout="@layout/activity_head" />
+
+    <RadioGroup
+        android:id="@+id/navigation_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/activity_message_center_radiobutton_system_message"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableBottom="@drawable/style_under_line"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="系统消息"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/activity_message_center_radiobutton_my_supply"
+            style="@null"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableBottom="@drawable/style_under_line"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="我的发布"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/activity_message_center_radiobutton_my_reply"
+            style="@null"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableBottom="@drawable/style_under_line"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="我的回复"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/transparent" />
+
+    <FrameLayout
+        android:id="@+id/activity_message_center_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none" />
+
+</LinearLayout>

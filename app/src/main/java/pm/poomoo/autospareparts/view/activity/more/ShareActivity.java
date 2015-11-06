@@ -1,4 +1,4 @@
-package pm.poomoo.autospareparts.view.activity;
+package pm.poomoo.autospareparts.view.activity.more;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

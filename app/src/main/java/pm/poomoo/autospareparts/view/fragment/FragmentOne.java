@@ -42,7 +42,7 @@ import pm.poomoo.autospareparts.mode.TypeInfo;
 import pm.poomoo.autospareparts.util.PmGlide;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownElasticImp;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownScrollView;
-import pm.poomoo.autospareparts.view.activity.SupplyInformationActivity;
+import pm.poomoo.autospareparts.view.activity.start.SupplyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
 
