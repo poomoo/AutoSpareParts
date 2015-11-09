@@ -1,9 +1,10 @@
 package pm.poomoo.autospareparts.view.fragment;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -67,22 +68,27 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
      */
     public void init() {
         //加载“首页”
-        FragmentTransaction one = getSupportFragmentManager().beginTransaction();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction one = fragmentManager.beginTransaction();
+//        FragmentTransaction one = getSupportFragmentManager().beginTransaction();
         one.replace(R.id.fragment_relative_layout_one, new FragmentOne());
         one.setTransition(FragmentTransaction.TRANSIT_NONE);
         one.commit();
         //加载“客户资料”
-        FragmentTransaction two = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction two = fragmentManager.beginTransaction();
+//        FragmentTransaction two = getSupportFragmentManager().beginTransaction();
         two.replace(R.id.fragment_relative_layout_two, new FragmentTwo());
         two.setTransition(FragmentTransaction.TRANSIT_NONE);
         two.commit();
         //加载“供求发布”
-        FragmentTransaction three = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction three = fragmentManager.beginTransaction();
+//        FragmentTransaction three = getSupportFragmentManager().beginTransaction();
         three.replace(R.id.fragment_relative_layout_three, new FragmentThree());
         three.setTransition(FragmentTransaction.TRANSIT_NONE);
         three.commit();
         //加载“更多”
-        FragmentTransaction four = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction four = fragmentManager.beginTransaction();
+//        FragmentTransaction four = getSupportFragmentManager().beginTransaction();
         four.replace(R.id.fragment_relative_layout_five, new FragmentFour());
         four.setTransition(FragmentTransaction.TRANSIT_NONE);
         four.commit();

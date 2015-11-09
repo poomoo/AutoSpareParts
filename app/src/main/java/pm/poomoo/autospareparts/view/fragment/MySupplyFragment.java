@@ -37,12 +37,12 @@ import pm.poomoo.autospareparts.view.activity.more.MyMessageInfoActivity;
 /**
  * 系统消息
  */
-public class SystemMessageFragment extends PmBaseFragment {
+public class MySupplyFragment extends PmBaseFragment {
 
-    private final String TAG = SystemMessageFragment.class.getSimpleName();
-    @ViewInject(R.id.fragment_system_message_refreshable)
+    private final String TAG = MySupplyFragment.class.getSimpleName();
+    @ViewInject(R.id.fragment_my_supply_refreshable)
     private RefreshableView refreshableView;
-    @ViewInject(R.id.fragment_system_message_listView)
+    @ViewInject(R.id.fragment_my_supply_listView)
     private ListView mListView;
 
     private int mIndex = 1;//分页标记
@@ -57,7 +57,7 @@ public class SystemMessageFragment extends PmBaseFragment {
             return null;
         }
         LayoutInflater myInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = myInflater.inflate(R.layout.fragment_system_message, container, false);
+        View layout = myInflater.inflate(R.layout.fragment_my_supply, container, false);
         ViewUtils.inject(this, layout);
         init();
         return layout;
@@ -114,7 +114,7 @@ public class SystemMessageFragment extends PmBaseFragment {
 
         @Override
         public int getCount() {
-            return 1;
+            return messageInfos.size();
         }
 
         @Override
@@ -132,10 +132,6 @@ public class SystemMessageFragment extends PmBaseFragment {
             HolderView holderView;
             if (convertView == null) {
                 holderView = new HolderView();
-                convertView = inflater.inflate(R.layout.item_for_system_message_list, null);
-                holderView.title=(TextView)convertView.findViewById(R.id.item_for_system_message_textView_title);
-                holderView.dateTime=(TextView)convertView.findViewById(R.id.item_for_system_message_textView_date);
-                holderView.content=(TextView)convertView.findViewById(R.id.item_for_system_message_textView_content);
                 convertView.setTag(holderView);
             } else {
                 holderView = (HolderView) convertView.getTag();

@@ -9,9 +9,17 @@ public interface PmNetWorkInterface {
 
     //====================== 外网服务器 =========================
     /**
+     * 服务器地址(本地)
+     */
+    public static final String LOCAL_URL = "http://192.168.0.122/app/call.html";
+    /**
+     * 服务器地址(远程)
+     */
+    public static final String REMOTE_URL = "http://192.168.0.122/app/call.html";
+    /**
      * 服务器地址
      */
-    public static final String URL = "http://gyqp.poomoo.cn/api.php";
+    public static final String URL = LOCAL_URL;
     /**
      * 图片下载地址
      */

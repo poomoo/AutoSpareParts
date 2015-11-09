@@ -16,6 +16,8 @@
 package com.lidroid.xutils;
 
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.*;
 import com.lidroid.xutils.http.callback.HttpRedirectHandler;
@@ -24,6 +26,7 @@ import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.http.client.RetryHandler;
 import com.lidroid.xutils.http.client.entity.GZipDecompressingEntity;
 import com.lidroid.xutils.util.core.SimpleSSLSocketFactory;
+
 import org.apache.http.*;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
@@ -313,7 +316,6 @@ public class HttpUtils {
         handler.setExpiry(currentRequestExpiry);
         handler.setHttpRedirectHandler(httpRedirectHandler);
         request.setRequestParams(params, handler);
-
         handler.executeOnExecutor(executor, request);
         return handler;
     }

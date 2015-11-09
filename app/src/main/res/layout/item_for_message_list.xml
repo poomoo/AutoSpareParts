@@ -23,7 +23,6 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/item_for_message_explain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

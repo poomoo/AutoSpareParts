@@ -25,17 +25,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
 import pm.poomoo.autospareparts.mode.ReplyInfo;
+import pm.poomoo.autospareparts.mode.SupplyInfo;
 
 /**
  * Created by Android_PM on 2015/11/3.
@@ -65,12 +78,15 @@ public class SupplyInformationActivity extends PmBaseActivity {
     @ViewInject(R.id.activity_supply_information_layout_comment)
     private LinearLayout comment_layout;
 
-
+    private final String TAG = SupplyInformationActivity.class.getSimpleName();
     private BitmapUtils bitmapUtils;
-    private List<ReplyInfo> replyInfos = null;
+    private List<ReplyInfo> list_replyInfos = new ArrayList<>();
     private String name = "跑马科技", dateTime = "2015-11-03 15:21", content = "测试", commentName = "";
-    private String[] Utrls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
+    private String[] Urls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
     private ReplyAdapter replyAdapter = null;
+    private SupplyInfo supplyInfo = null;
+    private int index = 0;
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,30 +110,32 @@ public class SupplyInformationActivity extends PmBaseActivity {
                 goBackLastActivity();
             }
         });
+        supplyInfo = (SupplyInfo) getIntent().getSerializableExtra("SupplyInfo");
 
-        textView_name.setText(name);
-        textView_dateTime.setText(dateTime);
-        textView_content.setText(content);
+        textView_name.setText(supplyInfo.getContact());
+        textView_dateTime.setText(supplyInfo.getDateTime());
+        textView_content.setText(supplyInfo.getContent());
 
-        gridView.setAdapter(new GridViewAdapter(this, Utrls));
+        Urls = supplyInfo.getUrls().split(",");
+        gridView.setAdapter(new GridViewAdapter(this, Urls));
 
-        replyInfos = new ArrayList<ReplyInfo>();
-        ReplyInfo replyInfo = new ReplyInfo();
-        replyInfo.setCommentName("贵阳汽配");
-        replyInfo.setReplyContent("你好吗？");
-        replyInfos.add(replyInfo);
-        replyInfo = new ReplyInfo();
-        replyInfo.setCommentName("贵阳汽配");
-        replyInfo.setReplyName("跑马科技");
-        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
-        replyInfos.add(replyInfo);
-        replyInfo = new ReplyInfo();
-        replyInfo.setCommentName("贵阳汽配");
-        replyInfo.setReplyName("跑马科技");
-        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
-        replyInfos.add(replyInfo);
-
-        replyAdapter = new ReplyAdapter(this, replyInfos);
+//        replyInfos = new ArrayList<ReplyInfo>();
+//        ReplyInfo replyInfo = new ReplyInfo();
+//        replyInfo.setCommentName("贵阳汽配");
+//        replyInfo.setReplyContent("你好吗？");
+//        replyInfos.add(replyInfo);
+//        replyInfo = new ReplyInfo();
+//        replyInfo.setCommentName("贵阳汽配");
+//        replyInfo.setReplyName("跑马科技");
+//        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
+//        replyInfos.add(replyInfo);
+//        replyInfo = new ReplyInfo();
+//        replyInfo.setCommentName("贵阳汽配");
+//        replyInfo.setReplyName("跑马科技");
+//        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
+//        replyInfos.add(replyInfo);
+        getReplyInformation(false);
+        replyAdapter = new ReplyAdapter(this, list_replyInfos);
         listView.setAdapter(replyAdapter);
 
         reply_layout.setOnClickListener(new View.OnClickListener() {
@@ -140,21 +158,21 @@ public class SupplyInformationActivity extends PmBaseActivity {
         switch (view.getId()) {
             case R.id.activity_supply_information_btn_comment:
                 ReplyInfo replyInfo = new ReplyInfo();
-                replyInfo.setCommentName("安卓");
-                replyInfo.setReplyName("");
-                replyInfo.setReplyContent(editText_comment.getText().toString().trim());
-                replyInfos.add(replyInfo);
+//                replyInfo.setCommentName("安卓");
+//                replyInfo.setReplyName("");
+//                replyInfo.setReplyContent(editText_comment.getText().toString().trim());
+                list_replyInfos.add(replyInfo);
                 replyAdapter.notifyDataSetChanged();
                 editText_comment.setText("");
                 Toast.makeText(SupplyInformationActivity.this, "留言成功", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_supply_information_btn_reply:
                 replyInfo = new ReplyInfo();
-                Log.i("lmf", "commentName:"+commentName);
-                replyInfo.setCommentName(commentName);
-                replyInfo.setReplyName("安卓");
-                replyInfo.setReplyContent(editText_reply.getText().toString().trim());
-                replyInfos.add(replyInfo);
+                Log.i("lmf", "commentName:" + commentName);
+//                replyInfo.setCommentName(commentName);
+//                replyInfo.setReplyName("安卓");
+//                replyInfo.setReplyContent(editText_reply.getText().toString().trim());
+                list_replyInfos.add(replyInfo);
                 replyAdapter.notifyDataSetChanged();
                 editText_reply.setText("");
                 if (reply_layout.getVisibility() == View.VISIBLE)
@@ -168,6 +186,53 @@ public class SupplyInformationActivity extends PmBaseActivity {
                 break;
         }
 
+    }
+
+    /**
+     * @param isRefreshable true-刷新
+     *                      获取回复信息
+     */
+    public void getReplyInformation(final boolean isRefreshable) {
+        RequestParams params = new RequestParams();
+
+        params.addBodyParameter(KEY_PACKNAME, "1025");
+        params.addBodyParameter("demand_id", supplyInfo.getId());
+        params.addBodyParameter("index", Integer.toString(index));
+
+        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    showLog(TAG, responseInfo.result);
+                    JSONObject result = new JSONObject(responseInfo.result);
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            JSONArray array = result.getJSONArray(KEY_LIST);
+                            int len = array.length();
+                            if (len > 0) {
+                                for (int i = 0; i < len; i++) {
+                                    JSONObject object = new JSONObject(array.get(i).toString());
+                                    ReplyInfo replyInfo;
+                                    replyInfo = gson.fromJson(object.toString(), ReplyInfo.class);
+                                    list_replyInfos.add(replyInfo);
+                                }
+                                index++;
+                                replyAdapter.notifyDataSetChanged();
+                            }
+                            break;
+                        case RET_FAIL:
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
     }
 
     /**
@@ -190,7 +255,7 @@ public class SupplyInformationActivity extends PmBaseActivity {
 
         @Override
         public int getCount() {
-            return Urls == null ? 0 : Urls.length;
+            return Urls.length;
         }
 
         @Override
@@ -228,7 +293,6 @@ public class SupplyInformationActivity extends PmBaseActivity {
 
         private List<ReplyInfo> list;
         private LayoutInflater inflater;
-        private TextView replyContent;
         private SpannableString ss;
         private String replyName;
         private String replyContentStr;
@@ -255,14 +319,20 @@ public class SupplyInformationActivity extends PmBaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            HolderView holderView;
+            if (convertView == null) {
+                holderView = new HolderView();
+                convertView = inflater.inflate(R.layout.item_for_relay, null);
+                holderView.textView = (TextView) convertView.findViewById(R.id.item_for_reply_content);
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
             ReplyInfo replyInfo = list.get(position);
-            convertView = inflater.inflate(R.layout.item_for_relay, null);
-            replyContent = (TextView)
-                    convertView.findViewById(R.id.item_for_reply_content);
 
-            replyName = replyInfo.getReplyName();
-            commentName = replyInfo.getCommentName();
-            replyContentStr = replyInfo.getReplyContent();
+            replyName = replyInfo.getRevert_user_name();
+            commentName = replyInfo.getFloor_user_name();
+            replyContentStr = replyInfo.getContent();
             //用来标识在 Span 范围内的文本前后输入新的字符时是否把它们也应用这个效果
             //Spanned.SPAN_EXCLUSIVE_EXCLUSIVE(前后都不包括)
             //Spanned.SPAN_INCLUSIVE_EXCLUSIVE(前面包括，后面不包括)
@@ -281,10 +351,10 @@ public class SupplyInformationActivity extends PmBaseActivity {
                         replyName.length() + commentName.length() + 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 commentName = replyName;
             }
-            replyContent.setText(ss);
+            holderView.textView.setText(ss);
             //添加点击事件时，必须设置
-            replyContent.setMovementMethod(LinkMovementMethod.getInstance());
-            replyContent.setOnClickListener(new TextClick(commentName));
+            holderView.textView.setMovementMethod(LinkMovementMethod.getInstance());
+            holderView.textView.setOnClickListener(new TextClick(commentName));
             return convertView;
         }
 
@@ -302,7 +372,7 @@ public class SupplyInformationActivity extends PmBaseActivity {
                 reply_layout.setVisibility(View.VISIBLE);
                 comment_layout.setVisibility(View.INVISIBLE);
                 editText_reply.setHint("@" + this.name);
-                commentName=this.name;
+                commentName = this.name;
                 editText_reply.setHintTextColor(Color.GRAY);
                 editText_reply.setFocusable(true);
                 editText_reply.requestFocus();
@@ -312,5 +382,8 @@ public class SupplyInformationActivity extends PmBaseActivity {
             }
         }
 
+        class HolderView {
+            public TextView textView;
+        }
     }
 }

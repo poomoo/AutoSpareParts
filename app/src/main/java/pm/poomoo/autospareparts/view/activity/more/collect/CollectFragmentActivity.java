@@ -2,7 +2,8 @@ package pm.poomoo.autospareparts.view.activity.more.collect;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,12 +50,13 @@ public class CollectFragmentActivity extends PmBaseFragmentActivity {
             }
         });
 
-        FragmentTransaction one = getSupportFragmentManager().beginTransaction();
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction one = fragmentManager.beginTransaction();
         one.replace(R.id.collect_fragment_activity_relative_one, new FragmentCompany());
         one.setTransition(FragmentTransaction.TRANSIT_NONE);
         one.commit();
 
-        FragmentTransaction two = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction two = fragmentManager.beginTransaction();
         two.replace(R.id.collect_fragment_activity_relative_two, new FragmentClient());
         two.setTransition(FragmentTransaction.TRANSIT_NONE);
         two.commit();
