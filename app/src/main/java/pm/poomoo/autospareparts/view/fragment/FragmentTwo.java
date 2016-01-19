@@ -88,8 +88,7 @@ public class FragmentTwo extends PmBaseFragment {
 
     private void switchFragment(Fragment to) {
         FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (!to.isAdded()) { // 先判断是否被add过
             fragmentTransaction.hide(curFragment).add(R.id.activity_message_center_frameLayout, to); // 隐藏当前的fragment，add下一个到Activity中
         } else {
