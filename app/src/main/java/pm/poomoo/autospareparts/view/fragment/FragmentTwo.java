@@ -24,7 +24,7 @@ import pm.poomoo.autospareparts.base.PmBaseFragment;
 public class FragmentTwo extends PmBaseFragment {
 
 
-    private SystemMessageFragment fragment_system_message;
+    private SupplyListFragment fragment_supply_list;
     private MySupplyFragment fragment_my_supply;
     private MyReplyFragment fragment_my_reply;
     private Fragment curFragment;
@@ -53,9 +53,9 @@ public class FragmentTwo extends PmBaseFragment {
         // TODO 自动生成的方法存根
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragment_system_message = new SystemMessageFragment();
-        curFragment = fragment_system_message;
-        fragmentTransaction.add(R.id.activity_message_center_frameLayout, fragment_system_message);
+        fragment_supply_list = new SupplyListFragment();
+        curFragment = fragment_supply_list;
+        fragmentTransaction.add(R.id.activity_message_center_frameLayout, fragment_supply_list);
         fragmentTransaction.commit();
     }
 
@@ -66,10 +66,10 @@ public class FragmentTwo extends PmBaseFragment {
     public void setOnClickListener(View view) {
         switch (view.getId()) {
             case R.id.activity_message_center_radiobutton_system_message:
-                if (fragment_system_message == null)
-                    fragment_system_message = new SystemMessageFragment();
-                switchFragment(fragment_system_message);
-                curFragment = fragment_system_message;
+                if (fragment_supply_list == null)
+                    fragment_supply_list = new SupplyListFragment();
+                switchFragment(fragment_supply_list);
+                curFragment = fragment_supply_list;
                 break;
             case R.id.activity_message_center_radiobutton_my_supply:
                 if (fragment_my_supply == null)

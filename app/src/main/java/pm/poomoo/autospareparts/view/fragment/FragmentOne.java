@@ -56,7 +56,7 @@ import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
  *
  * @author AADC
  */
-public class FragmentOne extends PmBaseFragment implements PullDownScrollView.RefreshListener, AdapterView.OnItemClickListener {
+public class FragmentOne extends PmBaseFragment implements PullDownScrollView.RefreshListener {
 
     private final String TAG = FragmentOne.class.getSimpleName();
     @ViewInject(R.id.frag_one_pull_scroll_view)
@@ -73,8 +73,8 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     private int mTypePicHeight = 0;//图片高
     private List<CompanyInfo> advertisement = new ArrayList<>();//广告
     private List<SupplyInfo> list_supply = new ArrayList<>();//供求列表
-    private ListViewAdapter adapter = null;
-    private BitmapUtils bitmapUtils;
+
+
     private String[] Urls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
     private int index = 0;
     private Gson gson = new Gson();
@@ -109,10 +109,10 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         PmApplication.getInstance().getTypeInfos().clear();
         getAdvertisement();//获取广告列表
         getTypeList(false);//获取类型
-        getSupplyInformation(false);//获取供求列表
-        adapter = new ListViewAdapter(getActivity());
-        mListView.setAdapter(adapter);
-        mListView.setOnItemClickListener(this);
+
+//        adapter = new ListViewAdapter(getActivity());
+//        mListView.setAdapter(adapter);
+//        mListView.setOnItemClickListener(this);
 
         //初始化广告
         ViewGroup.LayoutParams params = mGlide.getLayoutParams();
@@ -148,7 +148,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     public void onRefresh(PullDownScrollView view) {
         getAdvertisement();//下拉刷新广告
         getTypeList(true);//获取类型
-        getSupplyInformation(true);//刷新供求列表
+
     }
 
     /**
@@ -329,55 +329,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         });
     }
 
-    /**
-     * 获取供求列表
-     */
-    public void getSupplyInformation(final boolean isRefreshable) {
-        RequestParams params = new RequestParams();
 
-        params.addBodyParameter(KEY_PACKNAME, "1025");
-        params.addBodyParameter("index", Integer.toString(index));
-
-        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
-            @Override
-            public void onSuccess(ResponseInfo<String> responseInfo) {
-                try {
-                    showLog(TAG, "供求列表返回:"+responseInfo.result);
-                    JSONObject result = new JSONObject(responseInfo.result);
-                    switch (result.getInt(KEY_RESULT)) {
-                        case RET_SUCCESS:
-                            if (isRefreshable)
-                                mPullDownScrollView.finishRefresh(format.format(new Date(System.currentTimeMillis())));
-
-                            JSONArray array = result.getJSONArray(KEY_LIST);
-                            int len = array.length();
-                            if (len > 0) {
-                                for (int i = 0; i < len; i++) {
-                                    JSONObject object = new JSONObject(array.get(i).toString());
-                                    SupplyInfo supplyInfo;
-                                    supplyInfo = gson.fromJson(object.toString(), SupplyInfo.class);
-                                    list_supply.add(supplyInfo);
-                                }
-                                index++;
-                                adapter.notifyDataSetChanged();
-                            }
-                            break;
-                        case RET_FAIL:
-                            if (isRefreshable)
-                                mPullDownScrollView.finishRefresh(format.format(new Date(System.currentTimeMillis())));
-                            break;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(HttpException error, String msg) {
-
-            }
-        });
-    }
 
     @Override
     public void onDestroyView() {
@@ -385,134 +337,6 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         mGlide.stopAnimation();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.i(TAG, "onItemClick");
-        Intent intent = new Intent(getActivity(), SupplyInformationActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("SupplyInfo", list_supply.get(i));
-        intent.putExtras(bundle);
-        startActivity(intent);
-        getActivityInFromRight();
-    }
 
-    /**
-     * 适配器
-     */
-    public class ListViewAdapter extends BaseAdapter {
-
-        private LayoutInflater inflater;
-
-        public ListViewAdapter(Context context) {
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public int getCount() {
-            return list_supply.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return list_supply.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Log.i("getview", position + "");
-            HolderView holderView;
-            if (convertView == null) {
-                holderView = new HolderView();
-                convertView = inflater.inflate(R.layout.item_for_supply, null);
-                holderView.name = (TextView) convertView.findViewById(R.id.item_for_supply_name);
-                holderView.dateTime = (TextView) convertView.findViewById(R.id.item_for_supply_dateTime);
-                holderView.content = (TextView) convertView.findViewById(R.id.item_for_supply_content);
-                holderView.gridView = (GridView) convertView.findViewById(R.id.item_for_supply_gridview);
-                convertView.setTag(holderView);
-            } else {
-                holderView = (HolderView) convertView.getTag();
-            }
-
-            //屏蔽掉gridview的点击事件，保持listview的点击事件
-            holderView.gridView.setClickable(false);
-            holderView.gridView.setPressed(false);
-            holderView.gridView.setEnabled(false);
-
-            holderView.name.setText(list_supply.get(position).getContact());
-            holderView.dateTime.setText(list_supply.get(position).getDateTime());
-            holderView.content.setText(list_supply.get(position).getContent());
-
-            Urls = list_supply.get(position).getUrls().split(",");
-            holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Urls));
-
-            return convertView;
-        }
-
-        class HolderView {
-            public TextView name;
-            public TextView dateTime;
-            public TextView content;
-            public GridView gridView;
-        }
-    }
-
-    /**
-     * 适配器
-     */
-    public class GridViewAdapter extends BaseAdapter {
-
-        private LayoutInflater inflater;
-        private String[] Urls;
-
-        public GridViewAdapter(Context context, String[] Urls) {
-            inflater = LayoutInflater.from(context);
-            this.Urls = Urls;
-
-            if (bitmapUtils == null) {
-                bitmapUtils = new BitmapUtils(getActivity());
-                bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return Urls == null ? 0 : Urls.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return Urls[position];
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            HolderView holderView;
-            if (convertView == null) {
-                holderView = new HolderView();
-                convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
-                holderView.imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
-
-                convertView.setTag(holderView);
-            } else {
-                holderView = (HolderView) convertView.getTag();
-            }
-            bitmapUtils.display(holderView.imageView, Urls[position]);
-            return convertView;
-        }
-
-        class HolderView {
-            public ImageView imageView;
-        }
-    }
 
 }
