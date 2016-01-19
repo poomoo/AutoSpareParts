@@ -94,6 +94,9 @@ public class RequirementActivity extends PmBaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        params.addBodyParameter(KEY_PACKNAME,"1024");
+        params.addBodyParameter("feedback_content", content);
+        params.addBodyParameter("phone_or_email", phoneNumber);
 
         showLoadingDialog("发布中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

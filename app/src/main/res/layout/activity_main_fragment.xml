@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomBar" />
-    <!--客户资料-->
+    <!--消息中心-->
     <RelativeLayout
         android:id="@+id/fragment_relative_layout_two"
         android:layout_width="match_parent"

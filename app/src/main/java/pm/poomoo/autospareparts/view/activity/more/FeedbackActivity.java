@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import pm.poomoo.autospareparts.R;
+import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
 
 /**
@@ -114,16 +115,19 @@ public class FeedbackActivity extends PmBaseActivity {
      */
     public void commitFeedbackContent(String content, String phoneNumber) {
         RequestParams params = new RequestParams();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(KEY_PACKNAME, 1015);
-            jsonObject.put("feedback_content", content);
-            jsonObject.put("phone_or_email", phoneNumber);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put(KEY_PACKNAME, 1015);
+//            jsonObject.put("feedback_content", content);
+//            jsonObject.put("phone_or_email", phoneNumber);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1015");
+        params.addBodyParameter("feedback_content", content);
+        params.addBodyParameter("phone_or_email", phoneNumber);
 
         showLoadingDialog("反馈中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

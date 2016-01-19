@@ -47,7 +47,7 @@ public class SystemMessageFragment extends PmBaseFragment {
 
     private int mIndex = 1;//分页标记
     private myAdapter adapter;
-    private List<MessageInfo> messageInfos = new ArrayList<MessageInfo>();//消息列表
+    private List<MessageInfo> messageInfos = new ArrayList<>();//消息列表
 
 
     @Override
@@ -156,15 +156,17 @@ public class SystemMessageFragment extends PmBaseFragment {
      */
     public void onGetMessageList(final boolean isRefresh) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1013);
-            jsonObject.put("index", mIndex);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1013);
+//            jsonObject.put("index", mIndex);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1013");
+        params.addBodyParameter("index",mIndex+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override

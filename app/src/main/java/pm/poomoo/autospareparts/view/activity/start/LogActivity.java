@@ -104,16 +104,20 @@ public class LogActivity extends PmBaseActivity {
      */
     public void logIn(String phoneNumber, String password) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1018);
-            jsonObject.put("phone_number", phoneNumber);
-            jsonObject.put("password", MD5(password));
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1018);
+//            jsonObject.put("phone_number", phoneNumber);
+//            jsonObject.put("password", MD5(password));
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1018");
+        params.addBodyParameter("phone_number", phoneNumber);
+        params.addBodyParameter("password", MD5(password));
 
         showLoadingDialog("登录中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

@@ -92,8 +92,7 @@ public class SupplyInformationActivity extends PmBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supply_information);
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         clearAllActivity();
         addActivityToArrayList(this);
         ViewUtils.inject(this);
@@ -111,29 +110,16 @@ public class SupplyInformationActivity extends PmBaseActivity {
             }
         });
         supplyInfo = (SupplyInfo) getIntent().getSerializableExtra("SupplyInfo");
+        Log.i(TAG, "supplyInfo:" + supplyInfo);
 
         textView_name.setText(supplyInfo.getContact());
         textView_dateTime.setText(supplyInfo.getDateTime());
         textView_content.setText(supplyInfo.getContent());
-
+//
         Urls = supplyInfo.getUrls().split(",");
         gridView.setAdapter(new GridViewAdapter(this, Urls));
 
-//        replyInfos = new ArrayList<ReplyInfo>();
-//        ReplyInfo replyInfo = new ReplyInfo();
-//        replyInfo.setCommentName("贵阳汽配");
-//        replyInfo.setReplyContent("你好吗？");
-//        replyInfos.add(replyInfo);
-//        replyInfo = new ReplyInfo();
-//        replyInfo.setCommentName("贵阳汽配");
-//        replyInfo.setReplyName("跑马科技");
-//        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
-//        replyInfos.add(replyInfo);
-//        replyInfo = new ReplyInfo();
-//        replyInfo.setCommentName("贵阳汽配");
-//        replyInfo.setReplyName("跑马科技");
-//        replyInfo.setReplyContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
-//        replyInfos.add(replyInfo);
+//        initTestData();
         getReplyInformation(false);
         replyAdapter = new ReplyAdapter(this, list_replyInfos);
         listView.setAdapter(replyAdapter);
@@ -151,6 +137,24 @@ public class SupplyInformationActivity extends PmBaseActivity {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
+    }
+
+    private void initTestData() {
+        list_replyInfos = new ArrayList<>();
+        ReplyInfo replyInfo = new ReplyInfo();
+        replyInfo.setFloor_user_name("贵阳汽配");
+        replyInfo.setContent("你好吗？");
+        list_replyInfos.add(replyInfo);
+        replyInfo = new ReplyInfo();
+        replyInfo.setFloor_user_name("贵阳汽配");
+        replyInfo.setRevert_user_name("跑马科技");
+        replyInfo.setContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
+        list_replyInfos.add(replyInfo);
+        replyInfo = new ReplyInfo();
+        replyInfo.setFloor_user_name("贵阳汽配");
+        replyInfo.setRevert_user_name("跑马科技");
+        replyInfo.setContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
+        list_replyInfos.add(replyInfo);
     }
 
     @OnClick({R.id.activity_supply_information_btn_comment, R.id.activity_supply_information_btn_reply})

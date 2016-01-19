@@ -236,17 +236,21 @@ public class FragmentCompany extends PmBaseFragment {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1011);
-            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("type", 1);
-            jsonObject.put("index", mIndex);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1011);
+//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("type", 1);
+//            jsonObject.put("index", mIndex);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1011");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
+        params.addBodyParameter("type", 1+"");
+        params.addBodyParameter("index", mIndex+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override

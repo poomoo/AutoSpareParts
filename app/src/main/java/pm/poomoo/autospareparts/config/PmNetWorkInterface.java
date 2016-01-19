@@ -11,7 +11,7 @@ public interface PmNetWorkInterface {
     /**
      * 服务器地址(本地)
      */
-    public static final String LOCAL_URL = "http://192.168.0.122/app/call.html";
+    public static final String LOCAL_URL = "http://192.168.0.110/app/call.html";
     /**
      * 服务器地址(远程)
      */

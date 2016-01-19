@@ -52,4 +52,15 @@ public class SupplyInfo implements Serializable {
     public void setUrls(String urls) {
         this.urls = urls;
     }
+
+    @Override
+    public String toString() {
+        return "SupplyInfo{" +
+                "id='" + id + '\'' +
+                ", contact='" + contact + '\'' +
+                ", dateTime='" + dateTime + '\'' +
+                ", content='" + content + '\'' +
+                ", urls='" + urls + '\'' +
+                '}';
+    }
 }

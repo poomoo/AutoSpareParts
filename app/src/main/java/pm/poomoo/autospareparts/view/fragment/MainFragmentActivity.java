@@ -74,7 +74,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
         one.replace(R.id.fragment_relative_layout_one, new FragmentOne());
         one.setTransition(FragmentTransaction.TRANSIT_NONE);
         one.commit();
-        //加载“客户资料”
+        //加载“消息中心”
         FragmentTransaction two = fragmentManager.beginTransaction();
 //        FragmentTransaction two = getSupportFragmentManager().beginTransaction();
         two.replace(R.id.fragment_relative_layout_two, new FragmentTwo());
@@ -115,7 +115,6 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
                         mRelativeFive.setVisibility(View.GONE);
                         mNumberOfNowShowView = index;
                     } else if (index == 3) {
-
                         mRelativeOne.setVisibility(View.GONE);
                         mRelativeTwo.setVisibility(View.GONE);
                         mRelativeThree.setVisibility(View.VISIBLE);

@@ -32,6 +32,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.fragment.MainFragmentActivity" />
+        <activity android:name=".view.activity.start.SupplyInformationActivity" />
         <activity android:name=".view.activity.company.CompanyListActivity" />
         <activity android:name=".view.activity.company.CompanyInformationActivity" />
         <activity android:name=".view.activity.client.ClientInformationActivity" />
@@ -49,8 +50,8 @@
         <activity android:name=".view.activity.more.collect.CollectFragmentActivity" />
         <activity android:name=".view.activity.more.MyMessageInfoActivity" />
         <activity android:name=".view.activity.more.RequirementActivity" />
-        <activity android:name=".view.activity.start.SupplyInformationActivity" />
         <activity android:name=".view.activity.more.ShareActivity" />
+        <activity android:name=".view.activity.more.UserInfoActivity" />
         <activity android:name=".view.activity.pics.PhotosActivity" />
         <activity android:name=".view.activity.pics.ImageGridActivity" />
         <activity android:name=".view.activity.pics.PhotoActivity" />

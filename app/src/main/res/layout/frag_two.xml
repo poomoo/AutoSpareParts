@@ -15,39 +15,6 @@
         android:layout_below="@id/two_head"
         android:orientation="vertical">
 
-
-        <LinearLayout
-            android:id="@+id/client_list_linear_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/search_background"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingBottom="6dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="6dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@null"
-                android:src="@drawable/search_icon" />
-
-            <EditText
-                android:id="@+id/client_list_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:background="#0000"
-                android:hint="请输入车型或商品名称"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textSize="18sp" />
-
-        </LinearLayout>
-
         <pm.poomoo.autospareparts.util.RefreshableView
             android:id="@+id/frag_two_list_refreshable"
             android:layout_width="match_parent"

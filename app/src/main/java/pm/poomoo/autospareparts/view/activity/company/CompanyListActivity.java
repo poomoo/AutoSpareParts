@@ -307,15 +307,18 @@ public class CompanyListActivity extends PmBaseActivity {
      */
     public void getAdvertisement() {
         RequestParams params = new RequestParams();
-        final JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(KEY_PACKNAME, 1001);
-            jsonObject.put("adver_type", PmApplication.getInstance().getTypeInfos().get(mTypeNumber).getId());
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        final JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put(KEY_PACKNAME, 1001);
+//            jsonObject.put("adver_type", PmApplication.getInstance().getTypeInfos().get(mTypeNumber).getId());
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1001");
+        params.addBodyParameter("adver_type", PmApplication.getInstance().getTypeInfos().get(mTypeNumber).getId()+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -363,16 +366,20 @@ public class CompanyListActivity extends PmBaseActivity {
     public void getCompanyList(final boolean isRefreshable) {
         mIsComplete = false;
         RequestParams params = new RequestParams();
-        final JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(KEY_PACKNAME, 1003);
-            jsonObject.put("type_id", PmApplication.getInstance().getTypeInfos().get(mTypeNumber).getId());
-            jsonObject.put("index", mIndex);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        final JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put(KEY_PACKNAME, 1003);
+//            jsonObject.put("type_id", PmApplication.getInstance().getTypeInfos().get(mTypeNumber).getId());
+//            jsonObject.put("index", mIndex);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1003");
+        params.addBodyParameter("type_id", PmApplication.getInstance().getTypeInfos().get(mTypeNumber).getId()+"");
+        params.addBodyParameter("index", mIndex+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override

@@ -71,8 +71,8 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");//下拉时间格式
     private int mTypePicWidth = 0;//图片宽
     private int mTypePicHeight = 0;//图片高
-    private List<CompanyInfo> advertisement = new ArrayList<CompanyInfo>();//广告
-    private List<SupplyInfo> list_supply = new ArrayList<SupplyInfo>();//供求列表
+    private List<CompanyInfo> advertisement = new ArrayList<>();//广告
+    private List<SupplyInfo> list_supply = new ArrayList<>();//供求列表
     private ListViewAdapter adapter = null;
     private BitmapUtils bitmapUtils;
     private String[] Urls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
@@ -342,7 +342,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 try {
-                    showLog(TAG, responseInfo.result);
+                    showLog(TAG, "供求列表返回:"+responseInfo.result);
                     JSONObject result = new JSONObject(responseInfo.result);
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:

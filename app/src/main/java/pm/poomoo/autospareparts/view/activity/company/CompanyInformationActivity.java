@@ -317,17 +317,22 @@ public class CompanyInformationActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1005);
-            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId());
-            jsonObject.put("type", 1);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1005);
+//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId());
+//            jsonObject.put("type", 1);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1005");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId()+"");
+        params.addBodyParameter("type", 1+"");
 
         showLoadingDialog("收藏商家");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
@@ -366,17 +371,22 @@ public class CompanyInformationActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1022);
-            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId());
-            jsonObject.put("type", 1);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1022);
+//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId());
+//            jsonObject.put("type", 1);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1022");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId()+"");
+        params.addBodyParameter("type", 1+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -418,17 +428,22 @@ public class CompanyInformationActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1006);
-            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId());
-            jsonObject.put("type", 1);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1006);
+//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId());
+//            jsonObject.put("type", 1);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1006");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId()+"");
+        params.addBodyParameter("type", 1 + "");
+
 
         showLoadingDialog("取消收藏该公司");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

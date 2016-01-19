@@ -82,37 +82,12 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-
-                <!--检查更新-->
-                <LinearLayout
-                    android:id="@+id/frag_four_check_version"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/more_menu_item_background"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="6dp"
-                        android:src="@drawable/check_version" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="检查更新"
-                        android:textColor="#FFF" />
-                </LinearLayout>
-
                 <!--数据下载-->
                 <LinearLayout
                     android:id="@+id/frag_four_data_down"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
@@ -131,22 +106,12 @@
                         android:textColor="#FFF" />
 
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <!--第三行-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
                 <!--我的收藏-->
                 <LinearLayout
                     android:id="@+id/frag_four_collect"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
@@ -164,6 +129,16 @@
                         android:text="我的收藏"
                         android:textColor="#FFF" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <!--第三行-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+
                 <!--消息中心-->
                 <LinearLayout
                     android:id="@+id/frag_four_message"
@@ -173,7 +148,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -197,13 +173,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
+                <!--软件说明-->
+                <LinearLayout
+                    android:id="@+id/frag_four_user_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/more_menu_item_background"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="6dp"
+                        android:src="@drawable/ic_user_info" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="客户资料"
+                        android:textColor="#FFF" />
+                </LinearLayout>
                 <!--关于我们-->
                 <LinearLayout
                     android:id="@+id/frag_four_about_me"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
@@ -223,12 +221,21 @@
 
                 </LinearLayout>
 
+
+            </LinearLayout>
+
+            <!--第五行-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
                 <!--软件说明-->
                 <LinearLayout
                     android:id="@+id/frag_four_software_explain"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
@@ -246,22 +253,12 @@
                         android:text="使用说明"
                         android:textColor="#FFF" />
                 </LinearLayout>
-
-
-            </LinearLayout>
-
-            <!--第五行-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
                 <!--意见反馈-->
                 <LinearLayout
                     android:id="@+id/frag_four_feedback"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
@@ -281,12 +278,20 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
+            <!--第六行-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
                 <!--信息修改-->
                 <LinearLayout
                     android:id="@+id/frag_four_alter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/more_menu_item_background"
                     android:gravity="center"
@@ -305,6 +310,15 @@
                         android:text="信息修改"
                         android:textColor="#FFF" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/more_menu_item_background"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -309,17 +309,21 @@ public class ClientInformationActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1009);
-            jsonObject.put("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("user_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
-            jsonObject.put("type", 2);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1009);
+//            jsonObject.put("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("user_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
+//            jsonObject.put("type", 2);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1009");
+        params.addBodyParameter("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("user_id", PmApplication.getInstance().getShowClientInfo().get(0).getId() + "");
+        params.addBodyParameter("type", 2 + "");
 
         showLoadingDialog("收藏客户");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
@@ -358,17 +362,21 @@ public class ClientInformationActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1022);
-            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("company_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
-            jsonObject.put("type", 2);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1022);
+//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("company_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
+//            jsonObject.put("type", 2);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1022");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowClientInfo().get(0).getId() + "");
+        params.addBodyParameter("type", 2 + "");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -406,17 +414,21 @@ public class ClientInformationActivity extends PmBaseActivity {
      */
     public void onCancelCollectClient() {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1010);
-            jsonObject.put("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("user_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
-            jsonObject.put("type", 2);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1010);
+//            jsonObject.put("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID));
+//            jsonObject.put("user_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
+//            jsonObject.put("type", 2);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1010");
+        params.addBodyParameter("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("user_id", PmApplication.getInstance().getShowClientInfo().get(0).getId() + "");
+        params.addBodyParameter("type", 2 + "");
 
         showLoadingDialog("取消收藏该客户");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

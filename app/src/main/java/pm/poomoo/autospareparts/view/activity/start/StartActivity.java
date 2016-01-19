@@ -23,6 +23,7 @@ import java.util.TimerTask;
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
+import pm.poomoo.autospareparts.view.activity.more.MyMessageActivity;
 import pm.poomoo.autospareparts.view.fragment.MainFragmentActivity;
 
 /**

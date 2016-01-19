@@ -44,13 +44,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
-            android:src="@drawable/bottom_bar_client_normal" />
+            android:src="@drawable/bottom_bar_message_normal" />
 
         <TextView
             android:id="@+id/bottom_txt_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="客户资料"
+            android:text="消息中心"
             android:textColor="#FFF"
             android:textSize="12sp" />
     </LinearLayout>

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -170,7 +171,7 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
     /**
      * 是否已加载过一次layout，这里onLayout中的初始化只需加载一次
      */
-    private boolean loadOnce;
+    private boolean loadOnce = false;
 
     /**
      * 当前是否可以下拉，只有ListView滚动到头的时候才允许下拉
@@ -221,6 +222,7 @@ public class RefreshableView extends LinearLayout implements OnTouchListener {
             hideHeaderHeight = -header.getHeight();
             headerLayoutParams = (MarginLayoutParams) header.getLayoutParams();
             headerLayoutParams.topMargin = hideHeaderHeight;
+            header.setLayoutParams(headerLayoutParams);
             listView = (ListView) getChildAt(1);
             listView.setOnTouchListener(this);
             loadOnce = true;

@@ -154,17 +154,21 @@ public class SearchCompanyActivity extends PmBaseActivity {
     public void onSearchCompanyList(final boolean isRefreshable) {
         mIsComplete = false;
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1004);
-            jsonObject.put("type_id", mTypeId);
-            jsonObject.put("company_name", mSearchCompanyName);
-            jsonObject.put("index", mIndex);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            params.addBodyParameter(KEY_PACKNAME, 1004);
+//            params.addBodyParameter("type_id", mTypeId);
+//            params.addBodyParameter("company_name", mSearchCompanyName);
+//            params.addBodyParameter("index", mIndex);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, 1004+"");
+        params.addBodyParameter("type_id", mTypeId+"");
+        params.addBodyParameter("company_name", mSearchCompanyName);
+        params.addBodyParameter("index", mIndex+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -223,17 +227,21 @@ public class SearchCompanyActivity extends PmBaseActivity {
     public void getCompanyList(final boolean isRefreshable) {
         mIsComplete = false;
         RequestParams params = new RequestParams();
-        final JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(KEY_PACKNAME, 1023);
-            jsonObject.put("name", mSearchCompanyName);
-            jsonObject.put("type_id", 18);
-            jsonObject.put("index", mIndex);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        final JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put(KEY_PACKNAME, 1023);
+//            jsonObject.put("name", mSearchCompanyName);
+//            jsonObject.put("type_id", 18);
+//            jsonObject.put("index", mIndex);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, 1023+"");
+        params.addBodyParameter("name", mSearchCompanyName);
+        params.addBodyParameter("type_id", 18+"");
+        params.addBodyParameter("index", mIndex+"");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override

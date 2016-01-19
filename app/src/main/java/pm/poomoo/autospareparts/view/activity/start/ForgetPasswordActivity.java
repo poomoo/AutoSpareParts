@@ -142,15 +142,17 @@ public class ForgetPasswordActivity extends PmBaseActivity {
      */
     public void getCheckNumber(String phoneNumber) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1016);
-            jsonObject.put("phone_number", phoneNumber);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1016);
+//            jsonObject.put("phone_number", phoneNumber);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, "1016");
+        params.addBodyParameter("phone_number", phoneNumber);
 
         showLoadingDialog("获取验证码");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
@@ -186,17 +188,22 @@ public class ForgetPasswordActivity extends PmBaseActivity {
      */
     public void updatePassword(String phoneNumber, String checkNumber, String password) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1021);
-            jsonObject.put("phone_number", phoneNumber);
-            jsonObject.put("check_number", checkNumber);
-            jsonObject.put("password", MD5(password));
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1021);
+//            jsonObject.put("phone_number", phoneNumber);
+//            jsonObject.put("check_number", checkNumber);
+//            jsonObject.put("password", MD5(password));
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1021");
+        params.addBodyParameter("phone_number", phoneNumber);
+        params.addBodyParameter("check_number", checkNumber);
+        params.addBodyParameter("password", MD5(password));
 
         showLoadingDialog("修改密码中");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

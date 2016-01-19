@@ -28,6 +28,7 @@ import pm.poomoo.autospareparts.view.activity.more.AboutMeActivity;
 import pm.poomoo.autospareparts.view.activity.more.FeedbackActivity;
 import pm.poomoo.autospareparts.view.activity.more.MyMessageActivity;
 import pm.poomoo.autospareparts.view.activity.more.SoftwareExplainActivity;
+import pm.poomoo.autospareparts.view.activity.more.UserInfoActivity;
 import pm.poomoo.autospareparts.view.activity.more.collect.CollectFragmentActivity;
 import pm.poomoo.autospareparts.view.activity.start.LogActivity;
 import pm.poomoo.autospareparts.view.activity.start.RegisterActivity;
@@ -81,7 +82,7 @@ public class FragmentFour extends PmBaseFragment {
      *
      * @param view 点击的控件
      */
-    @OnClick({R.id.frag_four_collect, R.id.frag_four_share, R.id.frag_four_message, R.id.frag_four_about_me, R.id.frag_four_check_version,
+    @OnClick({R.id.frag_four_collect, R.id.frag_four_share, R.id.frag_four_message, R.id.frag_four_about_me, R.id.frag_four_user_info,
             R.id.frag_four_data_down, R.id.frag_four_software_explain, R.id.frag_four_register, R.id.frag_four_feedback, R.id.frag_four_alter})
     public void setOnClickListener(View view) {
         switch (view.getId()) {
@@ -91,7 +92,7 @@ public class FragmentFour extends PmBaseFragment {
                 getActivityInFromRight();
                 break;
             case R.id.frag_four_share:
-                //供求发布
+                //软件分享
                 startActivity(new Intent(getActivity(), ShareActivity.class));
                 getActivityInFromRight();
                 break;
@@ -105,9 +106,11 @@ public class FragmentFour extends PmBaseFragment {
                 startActivity(new Intent(getActivity(), AboutMeActivity.class));
                 getActivityInFromRight();
                 break;
-            case R.id.frag_four_check_version:
-                //检查更新
-                checkVersion();
+            case R.id.frag_four_user_info:
+                //客户资料
+//                checkVersion();
+                startActivity(new Intent(getActivity(), UserInfoActivity.class));
+                getActivityInFromRight();
                 break;
             case R.id.frag_four_data_down:
                 //数据下载
@@ -134,10 +137,6 @@ public class FragmentFour extends PmBaseFragment {
                 //会员注册
                 skipActivity(0);
                 break;
-//            case R.id.frag_four_vip_register:
-//                //VIP注册
-//                skipActivity(1);
-//                break;
             case R.id.frag_four_feedback:
                 //意见反馈
                 startActivity(new Intent(getActivity(), FeedbackActivity.class));

@@ -174,15 +174,19 @@ public class RegisterActivity extends PmBaseActivity {
      */
     public void onGetCheckNumber(String phoneNumber) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1016);
-            jsonObject.put("phone_number", phoneNumber);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1016);
+//            jsonObject.put("phone_number", phoneNumber);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1016");
+        params.addBodyParameter("phone_number", phoneNumber);
+
 
         showLoadingDialog("验证码获取中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
@@ -222,18 +226,24 @@ public class RegisterActivity extends PmBaseActivity {
      */
     public void onRegister(final String phoneNumber, String checkNumber, final String password) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1017);
-            jsonObject.put("phone_number", phoneNumber);
-            jsonObject.put("check_number", checkNumber);
-            jsonObject.put("password", MD5(password));
-            jsonObject.put("user_type", mNumber);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1017);
+//            jsonObject.put("phone_number", phoneNumber);
+//            jsonObject.put("check_number", checkNumber);
+//            jsonObject.put("password", MD5(password));
+//            jsonObject.put("user_type", mNumber);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1017");
+        params.addBodyParameter("phone_number", phoneNumber);
+        params.addBodyParameter("check_number", checkNumber);
+        params.addBodyParameter("password", MD5(password));
+        params.addBodyParameter("user_type", mNumber + "");
 
         showLoadingDialog("正在注册，请稍候...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
@@ -271,16 +281,20 @@ public class RegisterActivity extends PmBaseActivity {
      */
     public void logIn(String phoneNumber, String password) {
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1018);
-            jsonObject.put("phone_number", phoneNumber);
-            jsonObject.put("password", MD5(password));
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put(KEY_PACKNAME, 1018);
+//            jsonObject.put("phone_number", phoneNumber);
+//            jsonObject.put("password", MD5(password));
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//            showLog(TAG, jsonObject.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        params.addBodyParameter(KEY_PACKNAME, "1018");
+        params.addBodyParameter("phone_number", phoneNumber);
+        params.addBodyParameter("password", MD5(password));
 
         showLoadingDialog("登录中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {

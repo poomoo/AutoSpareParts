@@ -280,15 +280,15 @@ public class FragmentThree extends PmBaseFragment {
         }
     }
 
-    public void photo() {
-        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = new File(Environment.getExternalStorageDirectory() + "/myimage/",
-                String.valueOf(System.currentTimeMillis()) + ".jpg");
-        path = file.getPath();
-        Uri imageUri = Uri.fromFile(file);
-        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        getActivity().startActivityForResult(openCameraIntent, TAKE_PICTURE);
-    }
+        public void photo() {
+            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File file = new File(Environment.getExternalStorageDirectory() + "/myimage/",
+                    String.valueOf(System.currentTimeMillis()) + ".jpg");
+            path = file.getPath();
+            Uri imageUri = Uri.fromFile(file);
+            openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            getActivity().startActivityForResult(openCameraIntent, TAKE_PICTURE);
+        }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -338,15 +338,18 @@ public class FragmentThree extends PmBaseFragment {
      */
     public void commit(String content, String phoneNumber) {
         RequestParams params = new RequestParams();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(KEY_PACKNAME, 1024);
-            jsonObject.put("feedback_content", content);
-            jsonObject.put("phone_or_email", phoneNumber);
-            params.addBodyParameter(KEY, jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put(KEY_PACKNAME, 1024);
+//            jsonObject.put("feedback_content", content);
+//            jsonObject.put("phone_or_email", phoneNumber);
+//            params.addBodyParameter(KEY, jsonObject.toString());
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        params.addBodyParameter(KEY_PACKNAME, 1024+"");
+        params.addBodyParameter("feedback_content", content);
+        params.addBodyParameter("phone_or_email", phoneNumber);
 
         showLoadingDialog("发布中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
