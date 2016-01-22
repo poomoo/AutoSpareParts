@@ -15,16 +15,16 @@ public interface PmNetWorkInterface {
     /**
      * 服务器地址(远程)
      */
-    public static final String REMOTE_URL = "http://192.168.0.122/app/call.html";
+    public static final String REMOTE_URL = "http://www.gyqphy.com/app/call.html";
     /**
      * 服务器地址
      */
-    public static final String URL = LOCAL_URL;
+    public static final String URL = REMOTE_URL;
     /**
      * 图片下载地址
      */
-//    public static final String PIC_RUL = "http://gyqp.poomoo.cn/Uploads/";
-    public static final String PIC_RUL = "http://192.168.0.111/Uploads/";
+    public static final String PIC_RUL = "http://www.gyqphy.com/Uploads/";
+//    public static final String PIC_RUL = "http://192.168.0.111/Uploads/";
 
     //====================== 网络配置参数 =========================
     /**
@@ -34,7 +34,7 @@ public interface PmNetWorkInterface {
     /**
      * 服务器超时
      */
-    public static final int TIME_OUT = 5000;
+    public static final int TIME_OUT = 30*1000;
 
     // **************************** 传递值对应键名 ***************************
     public static final String KEY_RESULT_CODE = "key_result_code";
