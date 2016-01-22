@@ -75,7 +75,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     @ViewInject(R.id.frag_one_linear)
     private LinearLayout mLinearLayout;//加载子视图控件
     @ViewInject(R.id.frag_one_listview)
-    private MyListViewMainPager mListView;//供求发布展示
+    private NoScrollListView mListView;//供求发布展示
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");//下拉时间格式
     private int mTypePicWidth = 0;//图片宽
@@ -122,11 +122,11 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
         adapter = new myAdapter(getActivity());
         mListView.setAdapter(adapter);
-        mListView.setonRefreshListener(new MyListViewMainPager.OnRefreshListener() {
-            public void onRefresh() {
-                onGetMessageList(false);
-            }
-        });
+//        mListView.setonRefreshListener(new MyListViewMainPager.OnRefreshListener() {
+//            public void onRefresh() {
+//                onGetMessageList(false);
+//            }
+//        });
         mListView.setOnItemClickListener(this);
         onGetMessageList(false);
 
@@ -412,6 +412,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.i(TAG, "点击系统消息");
         Intent intent = new Intent(getActivity(), MyMessageInfoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("title", messageInfos.get(i).getTitle());
