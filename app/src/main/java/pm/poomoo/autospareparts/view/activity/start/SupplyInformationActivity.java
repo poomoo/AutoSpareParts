@@ -1,6 +1,7 @@
 package pm.poomoo.autospareparts.view.activity.start;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -46,19 +47,22 @@ import java.util.Date;
 import java.util.List;
 
 import pm.poomoo.autospareparts.R;
+import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
 import pm.poomoo.autospareparts.mode.ReplyInfo;
 import pm.poomoo.autospareparts.mode.SupplyInfo;
+import pm.poomoo.autospareparts.view.activity.more.ChangeUserInformationActivity;
+import pm.poomoo.autospareparts.view.custom.bigimage.ImagePagerActivity;
 
 /**
  * Created by Android_PM on 2015/11/3.
  * 供求发布详情
  */
 public class SupplyInformationActivity extends PmBaseActivity {
-    @ViewInject(R.id.activity_supply_information_name)
-    private TextView textView_name;
-    @ViewInject(R.id.activity_supply_information_dateTime)
-    private TextView textView_dateTime;
+    @ViewInject(R.id.txt_contact)
+    private TextView textView_contact;
+    @ViewInject(R.id.txt_address)
+    private TextView textView_address;
     @ViewInject(R.id.activity_supply_information_content)
     private TextView textView_content;
     @ViewInject(R.id.activity_supply_information_gridview)
@@ -87,6 +91,9 @@ public class SupplyInformationActivity extends PmBaseActivity {
     private SupplyInfo supplyInfo = null;
     private int index = 0;
     private Gson gson = new Gson();
+    private int floorPos;
+    private String user_id;
+    private String user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,14 +119,12 @@ public class SupplyInformationActivity extends PmBaseActivity {
         supplyInfo = (SupplyInfo) getIntent().getSerializableExtra("SupplyInfo");
         Log.i(TAG, "supplyInfo:" + supplyInfo);
 
-        textView_name.setText(supplyInfo.getContact());
-        textView_dateTime.setText(supplyInfo.getDateTime());
+        textView_contact.setText(supplyInfo.getContact());
+        textView_address.setText(supplyInfo.getAddress());
         textView_content.setText(supplyInfo.getContent());
-//
-        Urls = supplyInfo.getUrls().split(",");
+        Urls = supplyInfo.getPictures().split(",");
         gridView.setAdapter(new GridViewAdapter(this, Urls));
 
-//        initTestData();
         getReplyInformation(false);
         replyAdapter = new ReplyAdapter(this, list_replyInfos);
         listView.setAdapter(replyAdapter);
@@ -139,57 +144,49 @@ public class SupplyInformationActivity extends PmBaseActivity {
         });
     }
 
-    private void initTestData() {
-        list_replyInfos = new ArrayList<>();
-        ReplyInfo replyInfo = new ReplyInfo();
-        replyInfo.setFloor_user_name("贵阳汽配");
-        replyInfo.setContent("你好吗？");
-        list_replyInfos.add(replyInfo);
-        replyInfo = new ReplyInfo();
-        replyInfo.setFloor_user_name("贵阳汽配");
-        replyInfo.setRevert_user_name("跑马科技");
-        replyInfo.setContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
-        list_replyInfos.add(replyInfo);
-        replyInfo = new ReplyInfo();
-        replyInfo.setFloor_user_name("贵阳汽配");
-        replyInfo.setRevert_user_name("跑马科技");
-        replyInfo.setContent("我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^我很好呀^_^");
-        list_replyInfos.add(replyInfo);
-    }
 
     @OnClick({R.id.activity_supply_information_btn_comment, R.id.activity_supply_information_btn_reply})
     public void setOnClickListener(View view) {
         switch (view.getId()) {
             case R.id.activity_supply_information_btn_comment:
+                if (TextUtils.isEmpty(PmApplication.getInstance().getShared().getString(NAME))) {
+                    showToast("请先设置名字");
+                    startActivity(new Intent(this, ChangeUserInformationActivity.class));
+                    return;
+                }
                 ReplyInfo replyInfo = new ReplyInfo();
-//                replyInfo.setCommentName("安卓");
-//                replyInfo.setReplyName("");
-//                replyInfo.setReplyContent(editText_comment.getText().toString().trim());
-                list_replyInfos.add(replyInfo);
-                replyAdapter.notifyDataSetChanged();
+                replyInfo.setFloor_user_name("安卓测试");
+                replyInfo.setFloor_user_id(PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+                replyInfo.setContent(editText_comment.getText().toString().trim());
+                comment(replyInfo, list_replyInfos.size(), 1);
                 editText_comment.setText("");
                 Toast.makeText(SupplyInformationActivity.this, "留言成功", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.activity_supply_information_btn_reply:
+                if (TextUtils.isEmpty(PmApplication.getInstance().getShared().getString(NAME))) {
+                    showToast("请先设置名字");
+                    startActivity(new Intent(this, ChangeUserInformationActivity.class));
+                    return;
+                }
                 replyInfo = new ReplyInfo();
-                Log.i("lmf", "commentName:" + commentName);
-//                replyInfo.setCommentName(commentName);
-//                replyInfo.setReplyName("安卓");
-//                replyInfo.setReplyContent(editText_reply.getText().toString().trim());
-                list_replyInfos.add(replyInfo);
-                replyAdapter.notifyDataSetChanged();
+                replyInfo.setRevert_user_name("安卓测试");
+                replyInfo.setRevert_user_id(PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+                replyInfo.setContent(editText_reply.getText().toString().trim());
+                replyInfo.setFloor_user_name(user_name);
+                replyInfo.setFloor_user_id(user_id);
+                comment(replyInfo, floorPos + 1, 2);
+
                 editText_reply.setText("");
                 if (reply_layout.getVisibility() == View.VISIBLE)
                     reply_layout.setVisibility(View.GONE);
                 if (comment_layout.getVisibility() == View.INVISIBLE)
                     comment_layout.setVisibility(View.VISIBLE);
-                //隐藏键盘
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 Toast.makeText(SupplyInformationActivity.this, "回复成功", Toast.LENGTH_SHORT).show();
                 break;
         }
-
+        //隐藏键盘
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     /**
@@ -199,7 +196,7 @@ public class SupplyInformationActivity extends PmBaseActivity {
     public void getReplyInformation(final boolean isRefreshable) {
         RequestParams params = new RequestParams();
 
-        params.addBodyParameter(KEY_PACKNAME, "1025");
+        params.addBodyParameter(KEY_PACKNAME, "1027");
         params.addBodyParameter("demand_id", supplyInfo.getId());
         params.addBodyParameter("index", Integer.toString(index));
 
@@ -240,26 +237,74 @@ public class SupplyInformationActivity extends PmBaseActivity {
     }
 
     /**
+     */
+    public void comment(final ReplyInfo replyInfo, final int floor, final int flag) {
+        RequestParams params = new RequestParams();
+
+        params.addBodyParameter(KEY_PACKNAME, "1026");
+        params.addBodyParameter("demand_id", supplyInfo.getId());
+        params.addBodyParameter("floor_user_id", replyInfo.getFloor_user_id());
+        params.addBodyParameter("revert_user_id", replyInfo.getRevert_user_id());
+        params.addBodyParameter("content", replyInfo.getContent());
+        params.addBodyParameter("floor", floor + "");
+
+        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                try {
+                    showLog(TAG, responseInfo.result);
+                    JSONObject result = new JSONObject(responseInfo.result);
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            if (flag == 1) //评论
+                                list_replyInfos.add(replyInfo);
+                            else //回复
+                                list_replyInfos.add(floor, replyInfo);
+                            replyAdapter.notifyDataSetChanged();
+                            break;
+                        case RET_FAIL:
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+
+            }
+        });
+    }
+
+    /**
      * 适配器
      */
     public class GridViewAdapter extends BaseAdapter {
 
         private LayoutInflater inflater;
         private String[] Urls;
+        private ArrayList<String> list = new ArrayList<>();
 
         public GridViewAdapter(Context context, String[] Urls) {
             inflater = LayoutInflater.from(context);
             this.Urls = Urls;
+            for (int i = 0; i < Urls.length; i++)
+                list.add(PIC_RUL + Urls[i].substring(2));
+
 
             if (bitmapUtils == null) {
                 bitmapUtils = new BitmapUtils(SupplyInformationActivity.this);
                 bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+
+                bitmapUtils.configDiskCacheEnabled(true);
+                bitmapUtils.configMemoryCacheEnabled(false);
             }
         }
 
         @Override
         public int getCount() {
-            return Urls.length;
+            return Urls == null ? 0 : Urls.length;
         }
 
         @Override
@@ -274,23 +319,37 @@ public class SupplyInformationActivity extends PmBaseActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            HolderView holderView;
-            if (convertView == null) {
-                holderView = new HolderView();
-                convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
-                holderView.imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
+            convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
 
-                convertView.setTag(holderView);
-            } else {
-                holderView = (HolderView) convertView.getTag();
-            }
-            bitmapUtils.display(holderView.imageView, Urls[position]);
+            bitmapUtils.display(imageView, PIC_RUL + Urls[position].substring(2));
+            imageView.setOnClickListener(new imgClickListener(position, list));
             return convertView;
         }
 
-        class HolderView {
-            public ImageView imageView;
+        public class imgClickListener implements View.OnClickListener {
+            int position;
+            ArrayList<String> list = new ArrayList<>();
+
+            public imgClickListener(int position, ArrayList<String> list) {
+                this.position = position;
+                this.list = list;
+            }
+
+            @Override
+            public void onClick(View v) {
+                imageBrowse(position, list);
+            }
         }
+
+        protected void imageBrowse(int position, ArrayList<String> urls2) {
+            Intent intent = new Intent(SupplyInformationActivity.this, ImagePagerActivity.class);
+            // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+            SupplyInformationActivity.this.startActivity(intent);
+        }
+
     }
 
     public class ReplyAdapter extends BaseAdapter {
@@ -358,21 +417,28 @@ public class SupplyInformationActivity extends PmBaseActivity {
             holderView.textView.setText(ss);
             //添加点击事件时，必须设置
             holderView.textView.setMovementMethod(LinkMovementMethod.getInstance());
-            holderView.textView.setOnClickListener(new TextClick(commentName));
+            holderView.textView.setOnClickListener(new TextClick(commentName, position, replyInfo.getFloor_user_id()));
             return convertView;
         }
 
         private final class TextClick implements View.OnClickListener {
             private String name;
+            private int position;
+            private String revert_user_id;
 
-            public TextClick(String name) {
+            public TextClick(String name, int position, String revert_user_id) {
                 super();
                 this.name = name;
+                this.position = position;
+                this.revert_user_id = revert_user_id;
             }
 
             @Override
             public void onClick(View v) {
                 Log.i("lmf", "name:" + this.name);
+                floorPos = this.position;
+                user_id = this.revert_user_id;
+                user_name = this.name;
                 reply_layout.setVisibility(View.VISIBLE);
                 comment_layout.setVisibility(View.INVISIBLE);
                 editText_reply.setHint("@" + this.name);
@@ -380,8 +446,7 @@ public class SupplyInformationActivity extends PmBaseActivity {
                 editText_reply.setHintTextColor(Color.GRAY);
                 editText_reply.setFocusable(true);
                 editText_reply.requestFocus();
-                InputMethodManager inputManager =
-                        (InputMethodManager) editText_reply.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputManager = (InputMethodManager) editText_reply.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.showSoftInput(editText_reply, 0);
             }
         }

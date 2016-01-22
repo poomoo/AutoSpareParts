@@ -11,7 +11,7 @@ public interface PmNetWorkInterface {
     /**
      * 服务器地址(本地)
      */
-    public static final String LOCAL_URL = "http://192.168.0.110/app/call.html";
+    public static final String LOCAL_URL = "http://192.168.0.111/app/call.html";
     /**
      * 服务器地址(远程)
      */
@@ -23,7 +23,8 @@ public interface PmNetWorkInterface {
     /**
      * 图片下载地址
      */
-    public static final String PIC_RUL = "http://gyqp.poomoo.cn/Uploads/";
+//    public static final String PIC_RUL = "http://gyqp.poomoo.cn/Uploads/";
+    public static final String PIC_RUL = "http://192.168.0.111/Uploads/";
 
     //====================== 网络配置参数 =========================
     /**

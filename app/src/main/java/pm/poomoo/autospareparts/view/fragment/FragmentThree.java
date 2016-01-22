@@ -46,13 +46,19 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import pm.poomoo.autospareparts.R;
+import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.util.Bimp;
+import pm.poomoo.autospareparts.util.BottomBar;
 import pm.poomoo.autospareparts.util.FileUtils;
+import pm.poomoo.autospareparts.util.MyUtil;
 import pm.poomoo.autospareparts.view.activity.pics.PhotoActivity;
 import pm.poomoo.autospareparts.view.activity.pics.PhotosActivity;
+import pm.poomoo.autospareparts.view.activity.start.LogActivity;
 
 
 /**
@@ -67,12 +73,21 @@ public class FragmentThree extends PmBaseFragment {
     private EditText mEdtRequirement;
     @ViewInject(R.id.frag_three_edt_input_phone_number)
     private EditText mEdtPhoneNumber;
+    @ViewInject(R.id.frag_three_edt_input_address)
+    private EditText mEdtAddress;
     @ViewInject(R.id.frag_three_gridview)
     private GridView gridView;
 
     private GridAdapter adapter;
     private static final int TAKE_PICTURE = 0x000000;
     private String path = "";
+    private List<File> files = new ArrayList<>();
+    private File file;
+    private String pictures = "";
+    private int index = 0;
+    private String content = "";
+    private String contact = "";
+    private String address = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -171,8 +186,7 @@ public class FragmentThree extends PmBaseFragment {
                 if (position == 9) {
                     holder.image.setVisibility(View.GONE);
                 } else
-                    holder.image
-                            .setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_addpic_unfocused));
+                    holder.image.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.icon_addpic_unfocused));
             } else {
                 holder.image.setImageBitmap(Bimp.bmp.get(position));
             }
@@ -211,7 +225,7 @@ public class FragmentThree extends PmBaseFragment {
                                 Bitmap bm = Bimp.revitionImageSize(path);
                                 Bimp.bmp.add(bm);
                                 String newStr = path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."));
-                                FileUtils.saveBitmap(bm, "" + newStr);
+                                files.add(FileUtils.saveBitmap(bm, "" + newStr));
                                 Bimp.max += 1;
                                 Message message = new Message();
                                 message.what = 1;
@@ -280,21 +294,22 @@ public class FragmentThree extends PmBaseFragment {
         }
     }
 
-        public void photo() {
-            Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            File file = new File(Environment.getExternalStorageDirectory() + "/myimage/",
-                    String.valueOf(System.currentTimeMillis()) + ".jpg");
-            path = file.getPath();
-            Uri imageUri = Uri.fromFile(file);
-            openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            getActivity().startActivityForResult(openCameraIntent, TAKE_PICTURE);
-        }
+    public void photo() {
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        file = new File(Environment.getExternalStorageDirectory() + "/myimage/",
+                String.valueOf(System.currentTimeMillis()) + ".jpg");
+        path = file.getPath();
+        Uri imageUri = Uri.fromFile(file);
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        getActivity().startActivityForResult(openCameraIntent, TAKE_PICTURE);
+    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case TAKE_PICTURE:
                 if (Bimp.drr.size() < 9 && resultCode == -1) {
                     Bimp.drr.add(path);
+                    files.add(file);
                 }
                 break;
         }
@@ -309,10 +324,15 @@ public class FragmentThree extends PmBaseFragment {
     public void setOnClickListener(View view) {
         switch (view.getId()) {
             case R.id.frag_three_btn_commit:
-                String content = mEdtRequirement.getText().toString().trim();
-                String contact = mEdtPhoneNumber.getText().toString().trim();
+                content = mEdtRequirement.getText().toString().trim();
+                contact = mEdtPhoneNumber.getText().toString().trim();
+                address = mEdtAddress.getText().toString().trim();
                 if (checkInput(content, contact)) {
-                    commit(content, contact);
+                    showLoadingDialog("发布中...");
+                    if (Bimp.drr.size() > 0)
+                        uploadPics();
+                    else
+                        commit();
                 }
                 break;
         }
@@ -331,27 +351,70 @@ public class FragmentThree extends PmBaseFragment {
         return true;
     }
 
+    public void uploadPics() {
+        RequestParams params = new RequestParams();
+        params.addBodyParameter(KEY_PACKNAME, 1019 + "");
+        params.addBodyParameter("pic", files.get(index++));
+        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                showLog(TAG, responseInfo.result);
+                try {
+                    JSONObject result = new JSONObject(responseInfo.result);
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            String url = result.getString("url");
+                            if (TextUtils.isEmpty(pictures))
+                                pictures = url + ",";
+                            else
+                                pictures += url + ",";
+                            Message message = new Message();
+                            message.what = 1;
+                            myHandler.sendMessage(message);
+                            break;
+                        case RET_FAIL:
+                            showDismissLoadingDialog("图片上传失败", false);
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                showDismissLoadingDialog("网络错误", false);
+            }
+        });
+    }
+
+    Handler myHandler = new Handler() {
+        public void handleMessage(Message msg) {
+
+            if (msg.what == 1) {
+                if (index == Bimp.drr.size()) {
+                    commit();
+                } else {
+                    uploadPics();
+                }
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     /**
      * 发布供求到服务器
-     *
-     * @param content 内容
      */
-    public void commit(String content, String phoneNumber) {
+    public void commit() {
         RequestParams params = new RequestParams();
-//        JSONObject jsonObject = new JSONObject();
-//        try {
-//            jsonObject.put(KEY_PACKNAME, 1024);
-//            jsonObject.put("feedback_content", content);
-//            jsonObject.put("phone_or_email", phoneNumber);
-//            params.addBodyParameter(KEY, jsonObject.toString());
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-        params.addBodyParameter(KEY_PACKNAME, 1024+"");
+        params.addBodyParameter(KEY_PACKNAME, 1024 + "");
+        params.addBodyParameter("user_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
         params.addBodyParameter("feedback_content", content);
-        params.addBodyParameter("phone_or_email", phoneNumber);
+        params.addBodyParameter("phone_or_email", contact);
+        params.addBodyParameter("pictures", pictures);
+        params.addBodyParameter("address", address);
 
-        showLoadingDialog("发布中...");
+        showLog(TAG, "params:" + params.toString());
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
@@ -366,7 +429,10 @@ public class FragmentThree extends PmBaseFragment {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
                                             mEdtRequirement.setText("");
-                                            mEdtRequirement.setText("");
+                                            mEdtPhoneNumber.setText("");
+                                            mEdtAddress.setText("");
+                                            BottomBar.onItemChangedListener.onItemChanged(1);
+                                            BottomBar.instance.cancelLinearBackground(1);
                                         }
                                     }).create().show();
                             break;

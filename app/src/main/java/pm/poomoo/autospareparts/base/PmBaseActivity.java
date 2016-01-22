@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -120,6 +121,9 @@ public class PmBaseActivity extends Activity implements PmNetWorkInterface, PmCo
         }
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
         bitmapUtils.configDefaultLoadingImage(R.drawable.ic_launcher);
+
+        bitmapUtils.configDiskCacheEnabled(true);
+        bitmapUtils.configMemoryCacheEnabled(false);
         bitmapUtils.display(imageView, PIC_RUL + url);
         showLog(PIC_RUL + url);
     }
@@ -143,6 +147,8 @@ public class PmBaseActivity extends Activity implements PmNetWorkInterface, PmCo
      * @return 加密之后的字符串
      */
     public static String MD5(String str) {
+        if (TextUtils.isEmpty(str))
+            return "";
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");

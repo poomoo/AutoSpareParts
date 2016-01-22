@@ -23,6 +23,8 @@ import org.json.JSONObject;
 
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
+import pm.poomoo.autospareparts.util.MyUtil;
+import pm.poomoo.autospareparts.view.activity.more.ChangeUserInformationActivity;
 import pm.poomoo.autospareparts.view.activity.more.ShareActivity;
 import pm.poomoo.autospareparts.view.activity.more.AboutMeActivity;
 import pm.poomoo.autospareparts.view.activity.more.FeedbackActivity;
@@ -88,8 +90,13 @@ public class FragmentFour extends PmBaseFragment {
         switch (view.getId()) {
             case R.id.frag_four_collect:
                 //我的收藏
-                startActivity(new Intent(getActivity(), CollectFragmentActivity.class));
-                getActivityInFromRight();
+                if (!MyUtil.isLogin()) {
+                    showToast("请登录");
+                    startActivity(new Intent(getActivity(), LogActivity.class));
+                } else {
+                    startActivity(new Intent(getActivity(), CollectFragmentActivity.class));
+                    getActivityInFromRight();
+                }
                 break;
             case R.id.frag_four_share:
                 //软件分享
@@ -109,8 +116,13 @@ public class FragmentFour extends PmBaseFragment {
             case R.id.frag_four_user_info:
                 //客户资料
 //                checkVersion();
-                startActivity(new Intent(getActivity(), UserInfoActivity.class));
-                getActivityInFromRight();
+                if (!MyUtil.isLogin()) {
+                    showToast("请登录");
+                    startActivity(new Intent(getActivity(), LogActivity.class));
+                } else {
+                    startActivity(new Intent(getActivity(), UserInfoActivity.class));
+                    getActivityInFromRight();
+                }
                 break;
             case R.id.frag_four_data_down:
                 //数据下载
@@ -139,13 +151,24 @@ public class FragmentFour extends PmBaseFragment {
                 break;
             case R.id.frag_four_feedback:
                 //意见反馈
-                startActivity(new Intent(getActivity(), FeedbackActivity.class));
-                getActivityInFromRight();
+                if (!MyUtil.isLogin()) {
+                    showToast("请登录");
+                    startActivity(new Intent(getActivity(), LogActivity.class));
+                } else {
+                    startActivity(new Intent(getActivity(), FeedbackActivity.class));
+                    getActivityInFromRight();
+                }
+
                 break;
             case R.id.frag_four_alter:
                 //信息修改
-                startActivity(new Intent(getActivity(), FeedbackActivity.class));
-                getActivityInFromRight();
+                if (!MyUtil.isLogin()) {
+                    showToast("请登录");
+                    startActivity(new Intent(getActivity(), LogActivity.class));
+                } else {
+                    startActivity(new Intent(getActivity(), ChangeUserInformationActivity.class));
+                    getActivityInFromRight();
+                }
                 break;
         }
     }

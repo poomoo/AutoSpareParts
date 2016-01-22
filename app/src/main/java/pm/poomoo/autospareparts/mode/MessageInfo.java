@@ -7,14 +7,14 @@ package pm.poomoo.autospareparts.mode;
 public class MessageInfo {
 
     private int id;//消息ID
-    private String picPath;//消息图片
+    private String pictures;//消息图片
     private String title;//消息标题
     private String content;//消息内容
     private long time;//消息时间
 
-    public MessageInfo(int id, String picPath, String title, String content, long time) {
+    public MessageInfo(int id, String pictures, String title, String content, long time) {
         this.id = id;
-        this.picPath = picPath;
+        this.pictures = pictures;
         this.title = title;
         this.content = content;
         this.time = time;
@@ -28,12 +28,12 @@ public class MessageInfo {
         this.id = id;
     }
 
-    public String getPicPath() {
-        return picPath;
+    public String getPictures() {
+        return pictures;
     }
 
-    public void setPicPath(String picPath) {
-        this.picPath = picPath;
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
     }
 
     public String getTitle() {
@@ -58,5 +58,16 @@ public class MessageInfo {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    @Override
+    public String toString() {
+        return "MessageInfo{" +
+                "id=" + id +
+                ", pictures='" + pictures + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", time=" + time +
+                '}';
     }
 }

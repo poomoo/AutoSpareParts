@@ -18,20 +18,23 @@ import pm.poomoo.autospareparts.R;
 public class BottomBar extends LinearLayout implements OnClickListener {
 
     private Context context;
-    private OnItemChangedListener onItemChangedListener;
+    public static OnItemChangedListener onItemChangedListener;
     private LinearLayout[] mLinearLayout = new LinearLayout[5];
     //    private TextView[] mTxtView = new TextView[5];
     private ImageView[] mImageView = new ImageView[5];
+    public static BottomBar instance;
 
     public BottomBar(Context context) {
         super(context);
         this.context = context;
+        instance = this;
         init();
     }
 
     public BottomBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        instance = this;
         init();
     }
 

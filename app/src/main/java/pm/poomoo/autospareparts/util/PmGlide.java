@@ -63,6 +63,9 @@ public class PmGlide extends RelativeLayout {
             bitmapUtils = new BitmapUtils(context);
 //            bitmapUtils.configDefaultLoadingImage(R.drawable.ic_launcher);
             bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+
+            bitmapUtils.configDiskCacheEnabled(true);
+            bitmapUtils.configMemoryCacheEnabled(false);
         }
         arrayImage = new String[arrayPic.length];
         mArrayImgSpot = new ImageView[arrayPic.length];

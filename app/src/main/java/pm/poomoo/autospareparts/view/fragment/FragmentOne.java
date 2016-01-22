@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.renderscript.Sampler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import org.json.JSONArray;
@@ -34,6 +36,7 @@ import org.json.JSONObject;
 import java.net.URLStreamHandler;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,14 +44,20 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.mode.CompanyInfo;
+import pm.poomoo.autospareparts.mode.MessageInfo;
 import pm.poomoo.autospareparts.mode.SupplyInfo;
 import pm.poomoo.autospareparts.mode.TypeInfo;
+import pm.poomoo.autospareparts.util.DateUtil;
 import pm.poomoo.autospareparts.util.PmGlide;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownElasticImp;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownScrollView;
+import pm.poomoo.autospareparts.view.activity.more.MyMessageInfoActivity;
 import pm.poomoo.autospareparts.view.activity.start.SupplyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
+import pm.poomoo.autospareparts.view.custom.MyListView;
+import pm.poomoo.autospareparts.view.custom.MyListViewMainPager;
+import pm.poomoo.autospareparts.view.custom.NoScrollListView;
 
 
 /**
@@ -56,7 +65,7 @@ import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
  *
  * @author AADC
  */
-public class FragmentOne extends PmBaseFragment implements PullDownScrollView.RefreshListener {
+public class FragmentOne extends PmBaseFragment implements PullDownScrollView.RefreshListener, AdapterView.OnItemClickListener {
 
     private final String TAG = FragmentOne.class.getSimpleName();
     @ViewInject(R.id.frag_one_pull_scroll_view)
@@ -66,19 +75,19 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     @ViewInject(R.id.frag_one_linear)
     private LinearLayout mLinearLayout;//加载子视图控件
     @ViewInject(R.id.frag_one_listview)
-    private ListView mListView;//供求发布展示
+    private MyListViewMainPager mListView;//供求发布展示
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");//下拉时间格式
     private int mTypePicWidth = 0;//图片宽
     private int mTypePicHeight = 0;//图片高
     private List<CompanyInfo> advertisement = new ArrayList<>();//广告
-    private List<SupplyInfo> list_supply = new ArrayList<>();//供求列表
+    private List<MessageInfo> messageInfos = new ArrayList<>();//消息列表
 
 
-    private String[] Urls = {"http://pic1a.nipic.com/2008-12-04/2008124215522671_2.jpg", "http://pic.nipic.com/2007-11-09/2007119122519868_2.jpg", "http://pic14.nipic.com/20110522/7411759_164157418126_2.jpg", "http://img.taopic.com/uploads/allimg/130501/240451-13050106450911.jpg", "http://pic25.nipic.com/20121209/9252150_194258033000_2.jpg", "http://pic.nipic.com/2007-11-09/200711912230489_2.jpg"};
-    private int index = 0;
-    private Gson gson = new Gson();
-
+    private String[] Urls;
+    private int mIndex = 0;//分页标记
+    private myAdapter adapter;
+    private BitmapUtils bitmapUtils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,9 +119,16 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         getAdvertisement();//获取广告列表
         getTypeList(false);//获取类型
 
-//        adapter = new ListViewAdapter(getActivity());
-//        mListView.setAdapter(adapter);
-//        mListView.setOnItemClickListener(this);
+
+        adapter = new myAdapter(getActivity());
+        mListView.setAdapter(adapter);
+        mListView.setonRefreshListener(new MyListViewMainPager.OnRefreshListener() {
+            public void onRefresh() {
+                onGetMessageList(false);
+            }
+        });
+        mListView.setOnItemClickListener(this);
+        onGetMessageList(false);
 
         //初始化广告
         ViewGroup.LayoutParams params = mGlide.getLayoutParams();
@@ -121,6 +137,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         //初始化下拉刷新
         mPullDownScrollView.setRefreshListener(this);
         mPullDownScrollView.setPullDownElastic(new PullDownElasticImp(getActivity()));
+        Log.i(TAG, "init------");
     }
 
     /**
@@ -148,13 +165,15 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     public void onRefresh(PullDownScrollView view) {
         getAdvertisement();//下拉刷新广告
         getTypeList(true);//获取类型
-
+        mIndex = 0;
+        onGetMessageList(true);
     }
 
     /**
      * 加载子视图
      */
     public void initChildView() {
+        Log.i(TAG, "initChildView开始");
         mLinearLayout.removeAllViews();
         int n = -1;
         //计算有多少行
@@ -162,14 +181,16 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         if (PmApplication.getInstance().getTypeInfos().size() % 2 == 0)
             maxLine = PmApplication.getInstance().getTypeInfos().size() / 2;
         else maxLine = PmApplication.getInstance().getTypeInfos().size() / 2 + 1;
-
+        Log.i(TAG, "initChildView-- maxLine" + maxLine);
         //循环所有行，并且取得每行的控件
         for (int i = 0; i < maxLine; i++) {
+            Log.i(TAG, "initChildView-- 循环开始" + i);
             //得到子视图第一个视图控件
             n++;
             LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_for_fragment_one_scroll, null);
             LinearLayout linearOne = (LinearLayout) linearLayout.findViewById(R.id.item_for_fragment_one_linear_one);
             ImageView imageViewOne = (ImageView) linearLayout.findViewById(R.id.item_for_fragment_one_pic_one);
+            Log.i(TAG, "initChildView-- 循环进行中" + n);
             ViewGroup.LayoutParams params = imageViewOne.getLayoutParams();
             params.width = mTypePicWidth;
             params.height = mTypePicHeight;
@@ -178,6 +199,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
             TextView textViewExplainOne = (TextView) linearLayout.findViewById(R.id.item_for_fragment_one_explain_one);
 
             getBitmap(imageViewOne, PmApplication.getInstance().getTypeInfos().get(n).getPicPath());
+            Log.i(TAG, "initChildView-- 循环进行中 getBitmap：" + PmApplication.getInstance().getTypeInfos().get(n).getPicPath());
             textViewNameOne.setText(PmApplication.getInstance().getTypeInfos().get(n).getName());
             textViewExplainOne.setText(PmApplication.getInstance().getTypeInfos().get(n).getExplain());
             final int numberOne = n;
@@ -187,7 +209,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                     skipActivity(numberOne);
                 }
             });
-
+            Log.i(TAG, "initChildView-- 第一个视图控件" + i);
             //得到子视图第二个视图控件(首先要判断是否要显示)
             n++;
             if (n < PmApplication.getInstance().getTypeInfos().size()) {
@@ -212,8 +234,11 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                     }
                 });
             }
+            Log.i(TAG, "initChildView-- 第二个视图控件" + i);
             mLinearLayout.addView(linearLayout);
+            Log.i(TAG, "initChildView-- 循环结束" + i);
         }
+        Log.i(TAG, "initChildView结束");
     }
 
     /**
@@ -293,7 +318,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 try {
-                    showLog(TAG, responseInfo.result);
+                    showLog(TAG, "getTypeList返回:" + responseInfo.result);
                     JSONObject result = new JSONObject(responseInfo.result);
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
@@ -329,7 +354,55 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         });
     }
 
+    /**
+     * 获取消息列表
+     */
+    public void onGetMessageList(final boolean isRefreshable) {
+        Log.i(TAG, "onGetMessageList------");
+        RequestParams params = new RequestParams();
+        params.addBodyParameter(KEY_PACKNAME, "1013");
+        params.addBodyParameter("index", mIndex + "");
 
+        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                showLog(TAG, "系统消息返回:" + responseInfo.result);
+                try {
+                    JSONObject result = new JSONObject(responseInfo.result);
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            if (isRefreshable) {
+                                mPullDownScrollView.finishRefresh(format.format(new Date(System.currentTimeMillis())));
+                                messageInfos.clear();
+                            }
+                            JSONArray arrayList = result.getJSONArray("list");
+                            if (arrayList.length() > 0) {
+                                for (int i = 0; i < arrayList.length(); i++) {
+                                    JSONObject resultList = new JSONObject(arrayList.get(i).toString());
+                                    messageInfos.add(new MessageInfo(resultList.getInt("id"), resultList.getString("pictures"), resultList.getString("title"),
+                                            resultList.getString("content"), resultList.getLong("time")));
+                                }
+                            } else showToast("没有更多的数据");
+                            mIndex++;
+                            adapter.notifyDataSetChanged();
+                            break;
+                        case RET_FAIL:
+                            if (isRefreshable)
+                                mPullDownScrollView.finishRefresh(format.format(new Date(System.currentTimeMillis())));
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                if (isRefreshable)
+                    mPullDownScrollView.finishRefresh(format.format(new Date(System.currentTimeMillis())));
+            }
+        });
+    }
 
     @Override
     public void onDestroyView() {
@@ -337,6 +410,125 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         mGlide.stopAnimation();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent(getActivity(), MyMessageInfoActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("title", messageInfos.get(i).getTitle());
+        bundle.putString("content", messageInfos.get(i).getContent());
+        intent.putExtras(bundle);
+        startActivity(intent);
+        getActivityInFromRight();
+    }
 
+    /**
+     * 适配器
+     */
+    public class myAdapter extends BaseAdapter {
 
+        private LayoutInflater inflater;
+
+        public myAdapter(Context context) {
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return messageInfos.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return messageInfos.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            HolderView holderView;
+            if (convertView == null) {
+                holderView = new HolderView();
+                convertView = inflater.inflate(R.layout.item_for_system_message_list, null);
+                holderView.title = (TextView) convertView.findViewById(R.id.item_for_system_message_textView_title);
+                holderView.dateTime = (TextView) convertView.findViewById(R.id.item_for_system_message_textView_date);
+                holderView.content = (TextView) convertView.findViewById(R.id.item_for_system_message_textView_content);
+                holderView.gridView = (GridView) convertView.findViewById(R.id.item_for_system_message_gridview);
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
+//            showLog(TAG, "position:" + position + messageInfos.get(position).toString());
+            holderView.title.setText(messageInfos.get(position).getTitle());
+//            Calendar calendar = Calendar.getInstance();
+//            Log.i(TAG, "当前日期:" + calendar.getTime());
+//            calendar.setTimeInMillis(messageInfos.get(position).getTime());
+//            Log.i(TAG, "时间:" + calendar.getTimeInMillis() + "  日历:" + calendar.getTime());
+            holderView.dateTime.setText(DateUtil.getDateWith10Time(messageInfos.get(position).getTime()));
+            holderView.content.setText(messageInfos.get(position).getContent());
+            Urls = messageInfos.get(position).getPictures().split(",");
+            if (Urls.length > 0 && !TextUtils.isEmpty(Urls[0])) {
+                holderView.gridView.setVisibility(View.VISIBLE);
+                holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Urls));
+            } else {
+                holderView.gridView.setVisibility(View.GONE);
+            }
+            return convertView;
+        }
+
+        class HolderView {
+            public TextView title;
+            public TextView dateTime;
+            public TextView content;
+            public GridView gridView;
+        }
+    }
+
+    /**
+     * 适配器
+     */
+    public class GridViewAdapter extends BaseAdapter {
+
+        private String[] Urls;
+        private Context context;
+
+        public GridViewAdapter(Context context, String[] Urls) {
+            this.Urls = Urls;
+            this.context = context;
+
+            if (bitmapUtils == null) {
+                bitmapUtils = new BitmapUtils(getActivity());
+                bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+
+                bitmapUtils.configDiskCacheEnabled(true);
+                bitmapUtils.configMemoryCacheEnabled(false);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return Urls == null ? 0 : Urls.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return Urls[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = View.inflate(context, R.layout.item_for_supply_gridview, null);
+            ImageView imageView = (ImageView) view.findViewById(R.id.item_for_supply_imageView);
+            bitmapUtils.display(imageView, PIC_RUL + Urls[position].substring(2));
+            return view;
+        }
+    }
 }

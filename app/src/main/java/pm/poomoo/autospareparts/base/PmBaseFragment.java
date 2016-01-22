@@ -62,6 +62,8 @@ public class PmBaseFragment extends Fragment implements PmNetWorkInterface, PmCo
         }
         bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
         bitmapUtils.configDefaultLoadingImage(R.drawable.ic_launcher);
+        bitmapUtils.configDiskCacheEnabled(true);
+        bitmapUtils.configMemoryCacheEnabled(false);
         if (!TextUtils.isEmpty(path)) {
             bitmapUtils.display(imageView, PIC_RUL + path.substring(2));
         }

@@ -39,6 +39,10 @@ public interface PmConfig {
     public static final String USER_ID = "userId";
     //是否是VIP
     public static final String IS_VIP = "isVip";
+    //手机号
+    public static final String TEL = "tel";
+    //姓名
+    public static final String NAME = "name";
     //分享文本
-    public static final String SHARE_TEXT = "贵阳汽配手册APP，找配件，更方便，欢迎下载：";
+    public static final String SHARE_TEXT = "贵阳汽配手册APP，找配件，更方便，欢迎下载";
 }

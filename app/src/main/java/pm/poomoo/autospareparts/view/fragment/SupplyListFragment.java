@@ -3,6 +3,7 @@ package pm.poomoo.autospareparts.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,9 +38,12 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.mode.MessageInfo;
 import pm.poomoo.autospareparts.mode.SupplyInfo;
+import pm.poomoo.autospareparts.util.DateUtil;
 import pm.poomoo.autospareparts.util.RefreshableView;
 import pm.poomoo.autospareparts.view.activity.more.MyMessageInfoActivity;
 import pm.poomoo.autospareparts.view.activity.start.SupplyInformationActivity;
+import pm.poomoo.autospareparts.view.custom.MyListView;
+import pm.poomoo.autospareparts.view.custom.bigimage.ImagePagerActivity;
 
 
 /**
@@ -51,13 +55,13 @@ public class SupplyListFragment extends PmBaseFragment implements AdapterView.On
     @ViewInject(R.id.fragment_supply_list_refreshable)
     private RefreshableView refreshableView;
     @ViewInject(R.id.fragment_supply_list_listView)
-    private ListView mListView;
+    private MyListView mListView;
 
     private int index = 0;//分页标记
     private ListViewAdapter adapter = null;
     private Gson gson = new Gson();
     private List<SupplyInfo> list_supply = new ArrayList<>();//供求列表
-    private String[] Urls = {};
+    private String[] Urls;
     private BitmapUtils bitmapUtils;
 
     @Override
@@ -81,6 +85,11 @@ public class SupplyListFragment extends PmBaseFragment implements AdapterView.On
         adapter = new ListViewAdapter(getActivity());
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(this);
+        mListView.setonRefreshListener(new MyListView.OnRefreshListener() {
+            public void onRefresh() {
+                getSupplyInformation(false);
+            }
+        });
         setOnClickListener();
     }
 
@@ -115,8 +124,11 @@ public class SupplyListFragment extends PmBaseFragment implements AdapterView.On
                     JSONObject result = new JSONObject(responseInfo.result);
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
-                            if (isRefreshable)
+                            if (isRefreshable) {
                                 refreshableView.finishRefreshing();
+                                list_supply = new ArrayList<>();
+                            } else
+                                mListView.onRefreshComplete();
 
                             JSONArray array = result.getJSONArray(KEY_LIST);
                             int len = array.length();
@@ -207,12 +219,16 @@ public class SupplyListFragment extends PmBaseFragment implements AdapterView.On
             holderView.gridView.setEnabled(false);
 
             holderView.name.setText(list_supply.get(position).getContact());
-            holderView.dateTime.setText(list_supply.get(position).getDateTime());
+            holderView.dateTime.setText(DateUtil.getDateWith10Time(list_supply.get(position).getTime()));
             holderView.content.setText(list_supply.get(position).getContent());
 
-            Urls = list_supply.get(position).getUrls().split(",");
-            holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Urls));
-
+            Urls = list_supply.get(position).getPictures().split(",");
+            if (Urls.length > 0 && !TextUtils.isEmpty(Urls[0])) {
+                holderView.gridView.setVisibility(View.VISIBLE);
+                holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Urls));
+            } else {
+                holderView.gridView.setVisibility(View.GONE);
+            }
             return convertView;
         }
 
@@ -231,14 +247,21 @@ public class SupplyListFragment extends PmBaseFragment implements AdapterView.On
 
         private LayoutInflater inflater;
         private String[] Urls;
+        private ArrayList<String> list = new ArrayList<>();
 
         public GridViewAdapter(Context context, String[] Urls) {
             inflater = LayoutInflater.from(context);
             this.Urls = Urls;
+            for (int i = 0; i < Urls.length; i++)
+                list.add(PIC_RUL + Urls[i].substring(2));
+
 
             if (bitmapUtils == null) {
                 bitmapUtils = new BitmapUtils(getActivity());
                 bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+
+                bitmapUtils.configDiskCacheEnabled(true);
+                bitmapUtils.configMemoryCacheEnabled(false);
             }
         }
 
@@ -259,23 +282,37 @@ public class SupplyListFragment extends PmBaseFragment implements AdapterView.On
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            HolderView holderView;
-            if (convertView == null) {
-                holderView = new HolderView();
-                convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
-                holderView.imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
+            convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
 
-                convertView.setTag(holderView);
-            } else {
-                holderView = (HolderView) convertView.getTag();
-            }
-            bitmapUtils.display(holderView.imageView, Urls[position]);
+            bitmapUtils.display(imageView, PIC_RUL + Urls[position].substring(2));
+            imageView.setOnClickListener(new imgClickListener(position, list));
             return convertView;
         }
 
-        class HolderView {
-            public ImageView imageView;
+        public class imgClickListener implements View.OnClickListener {
+            int position;
+            ArrayList<String> list = new ArrayList<>();
+
+            public imgClickListener(int position, ArrayList<String> list) {
+                this.position = position;
+                this.list = list;
+            }
+
+            @Override
+            public void onClick(View v) {
+                imageBrowse(position, list);
+            }
         }
+
+        protected void imageBrowse(int position, ArrayList<String> urls2) {
+            Intent intent = new Intent(getActivity(), ImagePagerActivity.class);
+            // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+            getActivity().startActivity(intent);
+        }
+
     }
 
 }

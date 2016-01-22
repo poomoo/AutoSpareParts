@@ -59,6 +59,27 @@
                 android:singleLine="true"
                 android:textSize="14sp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="6dp" />
+
+            <EditText
+                android:id="@+id/frag_three_edt_input_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/feedback_input_background"
+                android:hint="请输入地址,方便联系您"
+                android:inputType="textEmailAddress"
+                android:paddingBottom="8dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="8dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
+
+
             <Button
                 android:id="@+id/frag_three_btn_commit"
                 android:layout_width="match_parent"

@@ -44,7 +44,7 @@
                     android:text="信息标题"
                     android:textSize="20sp" />
 
-                <pm.poomoo.autospareparts.view.custom.NoScrollListView
+                <pm.poomoo.autospareparts.view.custom.MyListViewMainPager
                     android:id="@+id/frag_one_listview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

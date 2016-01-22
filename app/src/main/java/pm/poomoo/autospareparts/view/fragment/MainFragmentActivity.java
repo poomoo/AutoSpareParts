@@ -1,10 +1,10 @@
 package pm.poomoo.autospareparts.view.fragment;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,7 +23,9 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragmentActivity;
 import pm.poomoo.autospareparts.util.BottomBar;
+import pm.poomoo.autospareparts.util.MyUtil;
 import pm.poomoo.autospareparts.view.activity.search.SearchCompanyActivity;
+import pm.poomoo.autospareparts.view.activity.start.LogActivity;
 
 
 /**
@@ -67,6 +69,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
      * 初始化
      */
     public void init() {
+        showLog(TAG, "init");
         //加载“首页”
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction one = fragmentManager.beginTransaction();
@@ -74,24 +77,28 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
         one.replace(R.id.fragment_relative_layout_one, new FragmentOne());
         one.setTransition(FragmentTransaction.TRANSIT_NONE);
         one.commit();
+        showLog(TAG, "1");
         //加载“消息中心”
         FragmentTransaction two = fragmentManager.beginTransaction();
 //        FragmentTransaction two = getSupportFragmentManager().beginTransaction();
         two.replace(R.id.fragment_relative_layout_two, new FragmentTwo());
         two.setTransition(FragmentTransaction.TRANSIT_NONE);
         two.commit();
+        showLog(TAG, "2");
         //加载“供求发布”
         FragmentTransaction three = fragmentManager.beginTransaction();
 //        FragmentTransaction three = getSupportFragmentManager().beginTransaction();
         three.replace(R.id.fragment_relative_layout_three, new FragmentThree());
         three.setTransition(FragmentTransaction.TRANSIT_NONE);
         three.commit();
+        showLog(TAG, "3");
         //加载“更多”
         FragmentTransaction four = fragmentManager.beginTransaction();
 //        FragmentTransaction four = getSupportFragmentManager().beginTransaction();
         four.replace(R.id.fragment_relative_layout_five, new FragmentFour());
         four.setTransition(FragmentTransaction.TRANSIT_NONE);
         four.commit();
+        showLog(TAG, "4");
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnItemChangedListener(new BottomBar.OnItemChangedListener() {
@@ -109,12 +116,20 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
                         mRelativeFive.setVisibility(View.GONE);
                         mNumberOfNowShowView = index;
                     } else if (index == 1) {
+                        if (!MyUtil.isLogin()) {
+                            showToast("请登录");
+                            startActivity(new Intent(MainFragmentActivity.this, LogActivity.class));
+                        }
                         mRelativeOne.setVisibility(View.GONE);
                         mRelativeTwo.setVisibility(View.VISIBLE);
                         mRelativeThree.setVisibility(View.GONE);
                         mRelativeFive.setVisibility(View.GONE);
                         mNumberOfNowShowView = index;
                     } else if (index == 3) {
+                        if (!MyUtil.isLogin()) {
+                            showToast("请登录");
+                            startActivity(new Intent(MainFragmentActivity.this, LogActivity.class));
+                        }
                         mRelativeOne.setVisibility(View.GONE);
                         mRelativeTwo.setVisibility(View.GONE);
                         mRelativeThree.setVisibility(View.VISIBLE);

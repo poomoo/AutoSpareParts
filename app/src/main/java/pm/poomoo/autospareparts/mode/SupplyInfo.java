@@ -9,9 +9,10 @@ import java.io.Serializable;
 public class SupplyInfo implements Serializable {
     String id = "";//id
     String contact = "";//标题
-    String dateTime = "";//日期时间
+    String time = "";//日期时间
     String content = "";//内容
-    String urls = "";//图片地址
+    String pictures = "";//图片地址
+    String address = "";//地址
 
     public String getId() {
         return id;
@@ -29,12 +30,12 @@ public class SupplyInfo implements Serializable {
         this.contact = contact;
     }
 
-    public String getDateTime() {
-        return dateTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getContent() {
@@ -45,12 +46,20 @@ public class SupplyInfo implements Serializable {
         this.content = content;
     }
 
-    public String getUrls() {
-        return urls;
+    public String getPictures() {
+        return pictures;
     }
 
-    public void setUrls(String urls) {
-        this.urls = urls;
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override
@@ -58,9 +67,10 @@ public class SupplyInfo implements Serializable {
         return "SupplyInfo{" +
                 "id='" + id + '\'' +
                 ", contact='" + contact + '\'' +
-                ", dateTime='" + dateTime + '\'' +
+                ", time='" + time + '\'' +
                 ", content='" + content + '\'' +
-                ", urls='" + urls + '\'' +
+                ", pictures='" + pictures + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

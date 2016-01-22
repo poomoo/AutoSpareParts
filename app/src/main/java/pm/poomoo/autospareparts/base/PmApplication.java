@@ -2,8 +2,12 @@ package pm.poomoo.autospareparts.base;
 
 import android.app.Activity;
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import com.lidroid.xutils.DbUtils;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +46,23 @@ public class PmApplication extends Application implements PmNetWorkInterface, Pm
         super.onCreate();
         ShareSDK.initSDK(this);
         instance = this;
-        activityList = new ArrayList<Activity>();
+        activityList = new ArrayList<>();
         shared = new PmShared(this);
-        typeInfos = new ArrayList<TypeInfo>();
-        showCompanyInfo = new ArrayList<CompanyInfo>();
-        showClientInfo = new ArrayList<ClientInfo>();
+        typeInfos = new ArrayList<>();
+        showCompanyInfo = new ArrayList<>();
+        showClientInfo = new ArrayList<>();
+
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder() //
+                .cacheInMemory(true) //
+                .cacheOnDisk(false) //
+                .bitmapConfig(Bitmap.Config.RGB_565)// 设置最低配置
+                .build();//
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration//
+                .Builder(getApplicationContext())//
+                .defaultDisplayImageOptions(defaultOptions)//
+                .writeDebugLogs()//
+                .build();//
+        ImageLoader.getInstance().init(config);
     }
 
     public static PmApplication getInstance() {
@@ -72,7 +88,7 @@ public class PmApplication extends Application implements PmNetWorkInterface, Pm
     }
 
     public DbUtils getDb() {
-        if(db == null){
+        if (db == null) {
             db = DbUtils.create(this);
         }
         return db;

@@ -3,14 +3,19 @@ package pm.poomoo.autospareparts.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -24,31 +29,38 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLStreamHandler;
 import java.util.ArrayList;
 import java.util.List;
 
 import pm.poomoo.autospareparts.R;
+import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
-import pm.poomoo.autospareparts.mode.MessageInfo;
+import pm.poomoo.autospareparts.mode.SupplyInfo;
+import pm.poomoo.autospareparts.util.DateUtil;
 import pm.poomoo.autospareparts.util.RefreshableView;
-import pm.poomoo.autospareparts.view.activity.more.MyMessageInfoActivity;
+import pm.poomoo.autospareparts.view.activity.start.SupplyInformationActivity;
+import pm.poomoo.autospareparts.view.custom.MyListView;
+import pm.poomoo.autospareparts.view.custom.bigimage.ImagePagerActivity;
 
 
 /**
  * 系统消息
  */
-public class MySupplyFragment extends PmBaseFragment {
+public class MySupplyFragment extends PmBaseFragment implements AdapterView.OnItemClickListener {
 
     private final String TAG = MySupplyFragment.class.getSimpleName();
     @ViewInject(R.id.fragment_my_supply_refreshable)
     private RefreshableView refreshableView;
     @ViewInject(R.id.fragment_my_supply_listView)
-    private ListView mListView;
+    private MyListView mListView;
 
-    private int mIndex = 1;//分页标记
-    private myAdapter adapter;
-    private List<MessageInfo> messageInfos = new ArrayList<MessageInfo>();//消息列表
-
+    private int index = 0;//分页标记
+    private ListViewAdapter adapter = null;
+    private Gson gson = new Gson();
+    private List<SupplyInfo> list_supply = new ArrayList<>();//供求列表
+    private String[] Urls;
+    private BitmapUtils bitmapUtils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,11 +79,16 @@ public class MySupplyFragment extends PmBaseFragment {
      * 初始化
      */
     public void init() {
-        adapter = new myAdapter(getActivity());
+        getMySupplyInformation(false);//获取供求列表
+        adapter = new ListViewAdapter(getActivity());
         mListView.setAdapter(adapter);
-        messageInfos.clear();
+        mListView.setOnItemClickListener(this);
+        mListView.setonRefreshListener(new MyListView.OnRefreshListener() {
+            public void onRefresh() {
+                getMySupplyInformation(false);
+            }
+        });
         setOnClickListener();
-        onGetMessageList(false);
     }
 
     /**
@@ -82,114 +99,53 @@ public class MySupplyFragment extends PmBaseFragment {
         refreshableView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                mIndex = 0;
-                onGetMessageList(true);
+                index = 0;
+                getMySupplyInformation(true);//刷新供求列表
             }
         }, 0);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), MyMessageInfoActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("title", messageInfos.get(i).getTitle());
-                bundle.putString("content", messageInfos.get(i).getContent());
-                intent.putExtras(bundle);
-                startActivity(intent);
-                getActivityInFromRight();
-            }
-        });
     }
 
     /**
-     * 适配器
+     * 获取供求列表
      */
-    public class myAdapter extends BaseAdapter {
-
-        private LayoutInflater inflater;
-
-        public myAdapter(Context context) {
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public int getCount() {
-            return messageInfos.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            HolderView holderView;
-            if (convertView == null) {
-                holderView = new HolderView();
-                convertView.setTag(holderView);
-            } else {
-                holderView = (HolderView) convertView.getTag();
-            }
-
-            return convertView;
-        }
-
-        class HolderView {
-            public TextView title;
-            public TextView dateTime;
-            public TextView content;
-        }
-    }
-
-    /**
-     * 获取消息列表
-     */
-    public void onGetMessageList(final boolean isRefresh) {
+    public void getMySupplyInformation(final boolean isRefreshable) {
         RequestParams params = new RequestParams();
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(KEY_PACKNAME, 1013);
-//            jsonObject.put("index", mIndex);
-//            params.addBodyParameter(KEY, jsonObject.toString());
-//            showLog(TAG, jsonObject.toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        params.addBodyParameter(KEY_PACKNAME, 1013+"");
-        params.addBodyParameter("index", mIndex+"");
+
+        params.addBodyParameter(KEY_PACKNAME, "1025");
+        params.addBodyParameter("user_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("index", Integer.toString(index));
+
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
-                showLog(TAG, responseInfo.result);
                 try {
+                    showLog(TAG, "供求列表返回:" + responseInfo.result);
                     JSONObject result = new JSONObject(responseInfo.result);
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
-                            if (isRefresh) {
+                            if (isRefreshable) {
                                 refreshableView.finishRefreshing();
-                                messageInfos.clear();
-                            }
-                            JSONArray arrayList = result.getJSONArray("list");
-                            if (arrayList.length() > 0) {
-                                for (int i = 0; i < arrayList.length(); i++) {
-                                    JSONObject resultList = new JSONObject(arrayList.get(i).toString());
-                                    messageInfos.add(new MessageInfo(resultList.getInt("id"), "", resultList.getString("title"),
-                                            resultList.getString("content"), resultList.getLong("time")));
+                                list_supply = new ArrayList<>();
+                            } else
+                                mListView.onRefreshComplete();
+
+                            JSONArray array = result.getJSONArray(KEY_LIST);
+                            int len = array.length();
+                            if (len > 0) {
+                                for (int i = 0; i < len; i++) {
+                                    JSONObject object = new JSONObject(array.get(i).toString());
+                                    SupplyInfo supplyInfo;
+                                    supplyInfo = gson.fromJson(object.toString(), SupplyInfo.class);
+                                    list_supply.add(supplyInfo);
                                 }
-                            } else showToast("没有数据可显示");
-                            mIndex++;
-                            adapter.notifyDataSetChanged();
+                                index++;
+                                adapter.notifyDataSetChanged();
+                            }
                             break;
                         case RET_FAIL:
-                            if (isRefresh) {
+                            if (isRefreshable)
                                 refreshableView.finishRefreshing();
-                            }
                             break;
                     }
                 } catch (JSONException e) {
@@ -199,10 +155,163 @@ public class MySupplyFragment extends PmBaseFragment {
 
             @Override
             public void onFailure(HttpException error, String msg) {
-                if (isRefresh) {
-                    refreshableView.finishRefreshing();
-                }
+
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.i(TAG, "onItemClick");
+        Intent intent = new Intent(getActivity(), SupplyInformationActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("SupplyInfo", list_supply.get(i));
+        intent.putExtras(bundle);
+        startActivity(intent);
+        getActivityInFromRight();
+    }
+
+    /**
+     * 适配器
+     */
+    public class ListViewAdapter extends BaseAdapter {
+
+        private LayoutInflater inflater;
+
+        public ListViewAdapter(Context context) {
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return list_supply.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return list_supply.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Log.i("getview", position + "");
+            HolderView holderView;
+            if (convertView == null) {
+                holderView = new HolderView();
+                convertView = inflater.inflate(R.layout.item_for_supply, null);
+                holderView.name = (TextView) convertView.findViewById(R.id.item_for_supply_name);
+                holderView.dateTime = (TextView) convertView.findViewById(R.id.item_for_supply_dateTime);
+                holderView.content = (TextView) convertView.findViewById(R.id.item_for_supply_content);
+                holderView.gridView = (GridView) convertView.findViewById(R.id.item_for_supply_gridview);
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
+
+            //屏蔽掉gridview的点击事件，保持listview的点击事件
+            holderView.gridView.setClickable(false);
+            holderView.gridView.setPressed(false);
+            holderView.gridView.setEnabled(false);
+
+            holderView.name.setText(list_supply.get(position).getContact());
+            holderView.dateTime.setText(DateUtil.getDateWith10Time(list_supply.get(position).getTime()));
+            holderView.content.setText(list_supply.get(position).getContent());
+
+            Urls = list_supply.get(position).getPictures().split(",");
+            if (Urls.length > 0 && !TextUtils.isEmpty(Urls[0])) {
+                holderView.gridView.setVisibility(View.VISIBLE);
+                holderView.gridView.setAdapter(new GridViewAdapter(getActivity(), Urls));
+            } else {
+                holderView.gridView.setVisibility(View.GONE);
+            }
+            return convertView;
+        }
+
+        class HolderView {
+            public TextView name;
+            public TextView dateTime;
+            public TextView content;
+            public GridView gridView;
+        }
+    }
+
+    /**
+     * 适配器
+     */
+    public class GridViewAdapter extends BaseAdapter {
+
+        private LayoutInflater inflater;
+        private String[] Urls;
+        private ArrayList<String> list = new ArrayList<>();
+
+        public GridViewAdapter(Context context, String[] Urls) {
+            inflater = LayoutInflater.from(context);
+            this.Urls = Urls;
+            for (int i = 0; i < Urls.length; i++)
+                list.add(PIC_RUL + Urls[i].substring(2));
+
+
+            if (bitmapUtils == null) {
+                bitmapUtils = new BitmapUtils(getActivity());
+                bitmapUtils.configDefaultLoadFailedImage(R.drawable.ic_launcher);
+
+                bitmapUtils.configDiskCacheEnabled(true);
+                bitmapUtils.configMemoryCacheEnabled(false);
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return Urls == null ? 0 : Urls.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return Urls[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = inflater.inflate(R.layout.item_for_supply_gridview, null);
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.item_for_supply_imageView);
+
+            bitmapUtils.display(imageView, PIC_RUL + Urls[position].substring(2));
+            imageView.setOnClickListener(new imgClickListener(position, list));
+            return convertView;
+        }
+
+        public class imgClickListener implements View.OnClickListener {
+            int position;
+            ArrayList<String> list = new ArrayList<>();
+
+            public imgClickListener(int position, ArrayList<String> list) {
+                this.position = position;
+                this.list = list;
+            }
+
+            @Override
+            public void onClick(View v) {
+                imageBrowse(position, list);
+            }
+        }
+
+        protected void imageBrowse(int position, ArrayList<String> urls2) {
+            Intent intent = new Intent(getActivity(), ImagePagerActivity.class);
+            // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+            getActivity().startActivity(intent);
+        }
+
     }
 }

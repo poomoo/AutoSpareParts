@@ -38,7 +38,7 @@
         <activity android:name=".view.activity.client.ClientInformationActivity" />
         <activity android:name=".view.activity.start.LogActivity" />
         <activity android:name=".view.activity.start.RegisterActivity" />
-        <activity android:name=".view.activity.start.CompleteClientInformationActivity" />
+        <activity android:name=".view.activity.more.ChangeUserInformationActivity" />
         <activity android:name=".view.activity.more.MyCollectActivity" />
         <activity android:name=".view.activity.more.MyMessageActivity" />
         <activity android:name=".view.activity.more.AboutMeActivity" />
@@ -55,6 +55,9 @@
         <activity android:name=".view.activity.pics.PhotosActivity" />
         <activity android:name=".view.activity.pics.ImageGridActivity" />
         <activity android:name=".view.activity.pics.PhotoActivity" />
+        <activity
+            android:name=".view.custom.bigimage.ImagePagerActivity"
+            android:exported="false" />
 
         <!-- 分享 -->
         <activity
