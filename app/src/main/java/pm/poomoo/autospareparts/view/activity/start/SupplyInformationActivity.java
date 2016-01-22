@@ -122,8 +122,10 @@ public class SupplyInformationActivity extends PmBaseActivity {
         textView_contact.setText(supplyInfo.getContact());
         textView_address.setText(supplyInfo.getAddress());
         textView_content.setText(supplyInfo.getContent());
+
         Urls = supplyInfo.getPictures().split(",");
-        gridView.setAdapter(new GridViewAdapter(this, Urls));
+        if (Urls.length > 0 && !TextUtils.isEmpty(Urls[0]))
+            gridView.setAdapter(new GridViewAdapter(this, Urls));
 
         getReplyInformation(false);
         replyAdapter = new ReplyAdapter(this, list_replyInfos);
@@ -291,7 +293,6 @@ public class SupplyInformationActivity extends PmBaseActivity {
             this.Urls = Urls;
             for (int i = 0; i < Urls.length; i++)
                 list.add(PIC_RUL + Urls[i].substring(2));
-
 
             if (bitmapUtils == null) {
                 bitmapUtils = new BitmapUtils(SupplyInformationActivity.this);
