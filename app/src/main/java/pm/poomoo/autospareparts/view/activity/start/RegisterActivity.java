@@ -279,7 +279,7 @@ public class RegisterActivity extends PmBaseActivity {
      * @param phoneNumber 用户名
      * @param password    密码
      */
-    public void logIn(String phoneNumber, String password) {
+    public void logIn(final String phoneNumber, String password) {
         RequestParams params = new RequestParams();
 //        try {
 //            JSONObject jsonObject = new JSONObject();
@@ -310,6 +310,8 @@ public class RegisterActivity extends PmBaseActivity {
                             JSONObject userInfo = new JSONObject(result.getString("userinfo"));
                             PmApplication.getInstance().getShared().putInt(USER_ID, userInfo.getInt("id"));
                             PmApplication.getInstance().getShared().putInt(IS_VIP, userInfo.getInt("isvip"));//0是会员  1是vip
+                            PmApplication.getInstance().getShared().putString(TEL, phoneNumber);//电话号码
+                            PmApplication.getInstance().getShared().putBoolean("isLogin", true);//登录状态
                             goBackLastActivity();
                             break;
                         case RET_FAIL:

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,12 +25,15 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
 import pm.poomoo.autospareparts.util.PmGlide;
+import pm.poomoo.autospareparts.view.custom.bigimage.ImagePagerActivity;
 
 /**
  * 显示商家详细信息
@@ -87,6 +91,7 @@ public class CompanyInformationActivity extends PmBaseActivity {
 
 
     private boolean mIsCollect = false;//false没有  true已经收藏
+    private ArrayList<String> picUrls = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +121,7 @@ public class CompanyInformationActivity extends PmBaseActivity {
         String pic = PmApplication.getInstance().getShowCompanyInfos().get(0).getPic();
         String[] picList = pic.split("[,]");
         for (int i = 0; i < picList.length; i++) {
+            picUrls.add(PIC_RUL + picList[i].substring(2));
             picList[i] = PIC_RUL + picList[i].substring(2);
         }
         mGlide.initPic(picList, this);
@@ -123,7 +129,7 @@ public class CompanyInformationActivity extends PmBaseActivity {
         mGlide.setPicClickListener(new PmGlide.picOnClickListener() {
             @Override
             public void onPicClick(int index) {
-
+                imageBrowse(index, picUrls);
             }
         });
 
@@ -330,9 +336,9 @@ public class CompanyInformationActivity extends PmBaseActivity {
 //        }
 
         params.addBodyParameter(KEY_PACKNAME, "1005");
-        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
-        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId()+"");
-        params.addBodyParameter("type", 1+"");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId() + "");
+        params.addBodyParameter("type", 1 + "");
 
         showLoadingDialog("收藏商家");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
@@ -384,9 +390,9 @@ public class CompanyInformationActivity extends PmBaseActivity {
 //        }
 
         params.addBodyParameter(KEY_PACKNAME, "1022");
-        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
-        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId()+"");
-        params.addBodyParameter("type", 1+"");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId() + "");
+        params.addBodyParameter("type", 1 + "");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -440,8 +446,8 @@ public class CompanyInformationActivity extends PmBaseActivity {
 //            e.printStackTrace();
 //        }
         params.addBodyParameter(KEY_PACKNAME, "1006");
-        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
-        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId()+"");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("company_id", PmApplication.getInstance().getShowCompanyInfos().get(0).getId() + "");
         params.addBodyParameter("type", 1 + "");
 
 
@@ -479,5 +485,13 @@ public class CompanyInformationActivity extends PmBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mGlide.stopAnimation();
+    }
+
+    protected void imageBrowse(int position, ArrayList<String> urls2) {
+        Intent intent = new Intent(this, ImagePagerActivity.class);
+        // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+        this.startActivity(intent);
     }
 }

@@ -91,7 +91,6 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         if (container == null) {
             return null;
         }

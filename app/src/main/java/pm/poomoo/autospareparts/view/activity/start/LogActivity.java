@@ -134,6 +134,7 @@ public class LogActivity extends PmBaseActivity {
                             PmApplication.getInstance().getShared().putInt(USER_ID, userInfo.getInt("id"));
                             PmApplication.getInstance().getShared().putInt(IS_VIP, userInfo.getInt("isvip"));//0是会员  1是vip
                             PmApplication.getInstance().getShared().putString(TEL, phoneNumber);//电话号码
+                            PmApplication.getInstance().getShared().putBoolean("isLogin", true);//登录状态
                             goBackLastActivity();
                             break;
                         case RET_FAIL:

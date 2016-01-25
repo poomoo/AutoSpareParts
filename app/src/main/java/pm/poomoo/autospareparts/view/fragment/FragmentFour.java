@@ -1,11 +1,13 @@
 package pm.poomoo.autospareparts.view.fragment;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import org.json.JSONObject;
 
 import pm.poomoo.autospareparts.R;
+import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.util.MyUtil;
 import pm.poomoo.autospareparts.view.activity.more.ChangeUserInformationActivity;
@@ -44,6 +47,8 @@ import pm.poomoo.autospareparts.view.activity.start.RegisterActivity;
 public class FragmentFour extends PmBaseFragment {
 
     private final String TAG = FragmentFour.class.getSimpleName();
+    private String temp;
+    private HeaderViewHolder headerViewHolder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,17 +69,29 @@ public class FragmentFour extends PmBaseFragment {
      * @param layout 当前界面布局控件
      */
     public void init(View layout) {
-        HeaderViewHolder headerViewHolder = getHeaderView(layout);
+        headerViewHolder = getHeaderView(layout);
         headerViewHolder.title.setText("更多");
         headerViewHolder.rightButton.setVisibility(View.VISIBLE);
         headerViewHolder.rightButton.setBackgroundResource(R.drawable.head_right_background);
         headerViewHolder.rightButton.setPadding(10, 2, 10, 2);
-        headerViewHolder.rightButton.setText("登录");
+        isLogin();
+
+    }
+
+    private void isLogin() {
+        Log.i(TAG, "isLogin:" + PmApplication.getInstance().getShared().getBoolean("isLogin"));
+        if (PmApplication.getInstance().getShared().getBoolean("isLogin", false))
+            temp = "注销";
+        else
+            temp = "登录";
+        headerViewHolder.rightButton.setText(temp);
         headerViewHolder.rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), LogActivity.class));
                 getActivityInFromRight();
+                if (temp.equals("注销"))
+                    PmApplication.getInstance().getShared().putBoolean("isLogin", false);
             }
         });
     }
@@ -242,5 +259,11 @@ public class FragmentFour extends PmBaseFragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+        isLogin();
+    }
 }
 
