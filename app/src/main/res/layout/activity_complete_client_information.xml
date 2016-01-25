@@ -11,14 +11,15 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="姓名修改"
             android:textSize="16sp" />
-
 
         <EditText
             android:id="@+id/edt_name"
@@ -35,6 +36,14 @@
             android:singleLine="true"
             android:textSize="14sp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:text="修改姓名时不用发送验证码"
+        android:textColor="@color/gray"
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -102,7 +111,6 @@
                 android:text="验证码　"
                 android:textSize="16sp" />
 
-
             <EditText
                 android:id="@+id/edt_code"
                 android:layout_width="match_parent"
@@ -132,7 +140,6 @@
                 android:layout_height="wrap_content"
                 android:text="新密码　"
                 android:textSize="16sp" />
-
 
             <EditText
                 android:id="@+id/edt_passWord"
