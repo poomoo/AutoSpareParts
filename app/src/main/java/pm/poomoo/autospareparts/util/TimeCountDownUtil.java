@@ -35,6 +35,7 @@ public class TimeCountDownUtil extends CountDownTimer {
     public void onFinish() {
         textView.setClickable(true);// 设置点击
         textView.setText("重新获取");
-
+        textView.setBackgroundResource(R.drawable.btn_getcode_background);
+        textView.setTextColor(Color.parseColor("#FFFFFF"));
     }
 }

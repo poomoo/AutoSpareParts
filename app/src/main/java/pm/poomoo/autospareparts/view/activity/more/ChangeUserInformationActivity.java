@@ -3,6 +3,7 @@ package pm.poomoo.autospareparts.view.activity.more;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -154,7 +155,7 @@ public class ChangeUserInformationActivity extends PmBaseActivity {
         params.addBodyParameter("name", name);
         params.addBodyParameter("password", MD5(passWord));
         params.addBodyParameter("phone_number", PmApplication.getInstance().getShared().getString(TEL));
-
+        showLog(TAG,"phone_number:"+PmApplication.getInstance().getShared().getString(TEL));
         showLoadingDialog("提交修改中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
