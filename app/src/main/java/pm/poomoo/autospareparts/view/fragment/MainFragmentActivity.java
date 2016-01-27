@@ -2,8 +2,10 @@ package pm.poomoo.autospareparts.view.fragment;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,9 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.android.pushservice.CustomPushNotificationBuilder;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import m.framework.utils.Utils;
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragmentActivity;
@@ -55,6 +61,8 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
 
     private long mTime = 0;//退出时用到的时间戳
     private int mNumberOfNowShowView = 0;//当前显示的界面是第几个
+    private Resources resource;
+    private final String pkgName = "pm.poomoo.autospareparts";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +71,19 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
         ViewUtils.inject(this);
         PmApplication.getInstance().getShared().putBoolean(IS_NEED_GUIDE, true);//关闭引导界面
         init();
+        resource = getResources();
+        CustomPushNotificationBuilder cBuilder = new CustomPushNotificationBuilder(
+                resource.getIdentifier("notification_custom_builder", "layout", pkgName),
+                resource.getIdentifier("notification_icon", "id", pkgName),
+                resource.getIdentifier("notification_title", "id", pkgName),
+                resource.getIdentifier("notification_text", "id", pkgName));
+        cBuilder.setNotificationFlags(Notification.FLAG_AUTO_CANCEL);
+        cBuilder.setNotificationDefaults(Notification.DEFAULT_VIBRATE);
+        cBuilder.setStatusbarIcon(R.drawable.icon);
+        // 推送高级设置，通知栏样式设置为下面的ID
+        PushManager.setNotificationBuilder(this, 1, cBuilder);
+        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, "GMfmiNDGy4QcZ12leQa7Tr8L");//GMfmiNDGy4QcZ12leQa7Tr8L
+        showLog(TAG,"startWork END");
     }
 
     /**

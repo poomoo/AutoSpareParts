@@ -5,10 +5,16 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.renren.Renren;
 import cn.sharesdk.sina.weibo.SinaWeibo;
@@ -28,6 +34,7 @@ import pm.poomoo.autospareparts.base.PmBaseActivity;
 public class ShareActivity extends PmBaseActivity {
     private Bitmap bitmap;
     private String weburl = "http://www.gyqphy.com/auto/";
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +57,7 @@ public class ShareActivity extends PmBaseActivity {
             }
         });
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-        ShareSDK.initSDK(this);
+        showLog("lmf", getAssets().getLocales()[0]+":"+getAssets().getLocales()[1]);
     }
 
     /**
@@ -90,44 +97,41 @@ public class ShareActivity extends PmBaseActivity {
             case R.id.activity_share_relative_wechat:
                 //分享到微信
                 Wechat.ShareParams wechat = new Wechat.ShareParams();
-                // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
                 wechat.setTitle(getString(R.string.app_name));
-                // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-                wechat.setTitleUrl(weburl);
-                // url仅在微信（包括好友和朋友圈）中使用
-                wechat.setUrl(weburl);
-                // site是分享此内容的网站名称，仅在QQ空间使用
-                wechat.setSite(getString(R.string.app_name));
-                // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-                wechat.setSiteUrl(weburl);
                 wechat.setText(SHARE_TEXT);
                 wechat.setImageData(bitmap);
+                wechat.setUrl(weburl);
+                wechat.setShareType(Platform.SHARE_WEBPAGE);
                 Log.i("lmf", "分享到微信:" + wechat);
                 ShareSDK.getPlatform(this, Wechat.NAME).share(wechat);
+                break;
+            case R.id.activity_share_relative_friend:
+                //分享到朋友圈
+                WechatMoments.ShareParams wechatMomentsShare = new WechatMoments.ShareParams();
+                wechatMomentsShare.setTitle(SHARE_TEXT);
+                wechatMomentsShare.setImageData(bitmap);
+                wechatMomentsShare.setUrl(weburl);
+                wechatMomentsShare.setShareType(Platform.SHARE_WEBPAGE);
+                ShareSDK.getPlatform(WechatMoments.NAME).share(wechatMomentsShare);
                 break;
             case R.id.activity_share_relative_qq:
                 //分享到QQ
                 QQ.ShareParams qq = new QQ.ShareParams();
-                qq.setTitle(SHARE_TEXT);
-                qq.setImageData(bitmap);
-                qq.setUrl(weburl);
+                qq.setTitle(getString(R.string.app_name));
+                qq.setTitleUrl(weburl);
+                qq.setText(SHARE_TEXT);
+                qq.setImagePath(path);
+//                qq.setImagePath(getResources().getAssets().toString() + "share.png");
+//                qq.setImageUrl("http://pic2.ooopic.com/01/03/51/25b1OOOPIC19.jpg");
+
                 Log.i("lmf", "分享到QQ:" + qq);
                 ShareSDK.getPlatform(this, QQ.NAME).share(qq);
                 break;
             case R.id.activity_share_relative_qzon:
                 //分享到空间
-                //分享到空间
                 QZone.ShareParams qzone = new QZone.ShareParams();
-                // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
                 qzone.setTitle(getString(R.string.app_name));
-                // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
                 qzone.setTitleUrl(weburl);
-                // url仅在微信（包括好友和朋友圈）中使用
-//                qzone.setUrl(weburl);
-                // site是分享此内容的网站名称，仅在QQ空间使用
-//                qzone.setSite(getString(R.string.app_name));
-                // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-//                qzone.setSiteUrl(weburl);
                 qzone.setText(SHARE_TEXT);
                 qzone.setImageData(bitmap);
                 ShareSDK.getPlatform(this, QZone.NAME).share(qzone);
@@ -159,18 +163,23 @@ public class ShareActivity extends PmBaseActivity {
             case R.id.activity_share_relative_sms:
                 //分享到短信
                 ShortMessage.ShareParams shortMessage = new ShortMessage.ShareParams();
-                shortMessage.setText(SHARE_TEXT);
-                shortMessage.setUrl(weburl);
+                shortMessage.setText(SHARE_TEXT + weburl);
                 ShareSDK.getPlatform(ShortMessage.NAME).share(shortMessage);
                 break;
-            case R.id.activity_share_relative_friend:
-                //分享到朋友圈
-                WechatMoments.ShareParams wechatMomentsShare = new WechatMoments.ShareParams();
-                wechatMomentsShare.setText(SHARE_TEXT);
-                wechatMomentsShare.setImageData(bitmap);
-                wechatMomentsShare.setUrl(weburl);
-                ShareSDK.getPlatform(WechatMoments.NAME).share(wechatMomentsShare);
-                break;
+
         }
+    }
+
+
+    private byte[] InputStreamToByte(InputStream is) throws IOException {
+        ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
+        int ch;
+        while ((ch = is.read()) != -1) {
+            bytestream.write(ch);
+        }
+        byte imgdata[] = bytestream.toByteArray();
+        bytestream.close();
+        return imgdata;
+
     }
 }

@@ -217,7 +217,11 @@ public class MyReplyFragment extends PmBaseFragment implements AdapterView.OnIte
             holderView.gridView.setPressed(false);
             holderView.gridView.setEnabled(false);
 
-            holderView.name.setText(list_supply.get(position).getContact());
+            holderView.name.setText(list_supply.get(position).getUser_name());
+            if(TextUtils.isEmpty(list_supply.get(position).getUser_name()))
+                holderView.name.setVisibility(View.GONE);
+            else
+                holderView.name.setVisibility(View.VISIBLE);
             holderView.dateTime.setText(DateUtil.getDateWith10Time(list_supply.get(position).getTime()));
             holderView.content.setText(list_supply.get(position).getContent());
 

@@ -53,7 +53,7 @@ import static cn.sharesdk.framework.utils.R.getStringRes;
 /**
  * 快捷分享的入口
  * <p>
- * 通过不同的setter设置参数，然后调用{@link #show(android.content.Context)}方法启动快捷分享
+ * 通过不同的setter设置参数，然后调用{@link #show(Context)}方法启动快捷分享
  */
 public class OnekeyShare extends FakeActivity implements
 		OnClickListener, PlatformActionListener, Callback {
@@ -716,7 +716,7 @@ public class OnekeyShare extends FakeActivity implements
 			long when = System.currentTimeMillis();
 			Notification notification = new Notification(notifyIcon, text, when);
 			PendingIntent pi = PendingIntent.getActivity(app, 0, new Intent(), 0);
-//			notification.setLatestEventInfo(app, notifyTitle, text, pi);
+			notification.setLatestEventInfo(app, notifyTitle, text, pi);
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			nm.notify(id, notification);
 

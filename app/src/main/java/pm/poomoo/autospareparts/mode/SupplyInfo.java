@@ -13,6 +13,7 @@ public class SupplyInfo implements Serializable {
     String content = "";//内容
     String pictures = "";//图片地址
     String address = "";//地址
+    String user_name="";
 
     public String getId() {
         return id;
@@ -62,6 +63,14 @@ public class SupplyInfo implements Serializable {
         this.address = address;
     }
 
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
     @Override
     public String toString() {
         return "SupplyInfo{" +
@@ -71,6 +80,7 @@ public class SupplyInfo implements Serializable {
                 ", content='" + content + '\'' +
                 ", pictures='" + pictures + '\'' +
                 ", address='" + address + '\'' +
+                ", user_name='" + user_name + '\'' +
                 '}';
     }
 }

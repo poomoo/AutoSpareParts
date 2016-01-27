@@ -78,8 +78,6 @@ public class ChangeUserInformationActivity extends PmBaseActivity {
      * @param view
      */
     public void toGetCode(View view) {
-        timeCountDownUtil = new TimeCountDownUtil(60 * 1000, 1000, mTxtGetCode);
-        timeCountDownUtil.start();
         getCode();
     }
 
@@ -128,6 +126,8 @@ public class ChangeUserInformationActivity extends PmBaseActivity {
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
                             showDismissLoadingDialog("获取验证码成功", true);
+                            timeCountDownUtil = new TimeCountDownUtil(60 * 1000, 1000, mTxtGetCode);
+                            timeCountDownUtil.start();
                             break;
                         case RET_FAIL:
                             showDismissLoadingDialog("获取验证码失败", false);
@@ -155,6 +155,7 @@ public class ChangeUserInformationActivity extends PmBaseActivity {
         params.addBodyParameter("name", name);
         params.addBodyParameter("password", MD5(passWord));
         params.addBodyParameter("phone_number", PmApplication.getInstance().getShared().getString(TEL));
+        params.addBodyParameter("check_number", code);
         showLog(TAG,"phone_number:"+PmApplication.getInstance().getShared().getString(TEL));
         showLoadingDialog("提交修改中...");
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
