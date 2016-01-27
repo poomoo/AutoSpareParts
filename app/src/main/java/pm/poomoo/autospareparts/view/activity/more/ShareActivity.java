@@ -3,6 +3,7 @@ package pm.poomoo.autospareparts.view.activity.more;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,8 @@ import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -57,7 +60,7 @@ public class ShareActivity extends PmBaseActivity {
             }
         });
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-        showLog("lmf", getAssets().getLocales()[0]+":"+getAssets().getLocales()[1]);
+        getPath();
     }
 
     /**
@@ -123,7 +126,6 @@ public class ShareActivity extends PmBaseActivity {
                 qq.setImagePath(path);
 //                qq.setImagePath(getResources().getAssets().toString() + "share.png");
 //                qq.setImageUrl("http://pic2.ooopic.com/01/03/51/25b1OOOPIC19.jpg");
-
                 Log.i("lmf", "分享到QQ:" + qq);
                 ShareSDK.getPlatform(this, QQ.NAME).share(qq);
                 break;
@@ -170,16 +172,26 @@ public class ShareActivity extends PmBaseActivity {
         }
     }
 
-
-    private byte[] InputStreamToByte(InputStream is) throws IOException {
-        ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
-        int ch;
-        while ((ch = is.read()) != -1) {
-            bytestream.write(ch);
+    private void getPath() {
+        try {// 判断SD卡中是否存在此文件夹
+            File baseFile = new File(Environment.getExternalStorageDirectory(), "share");
+            if (!baseFile.exists()) {
+                baseFile.mkdir();
+            }
+            path = baseFile.getAbsolutePath() + "/share.png";
+            File file = new File(path);
+            // 判断图片是否存此文件夹中
+            if (!file.exists()) {
+                file.createNewFile();
+                Bitmap pic = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+                FileOutputStream fos = new FileOutputStream(file);
+                pic.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+            }
+        } catch (Throwable t) {
+            t.printStackTrace();
+            path = null;
         }
-        byte imgdata[] = bytestream.toByteArray();
-        bytestream.close();
-        return imgdata;
-
     }
 }

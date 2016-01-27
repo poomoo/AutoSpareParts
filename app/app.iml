@@ -89,33 +89,20 @@
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Wechat-2.6.6" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Core-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="MobCommons" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Core-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Wechat-Favorite-2.6.6" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Renren-2.6.6" level="project" />
+    <orderEntry type="library" exported="" name="ShareSDK-QZone-2.4.2" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
     <orderEntry type="library" exported="" name="mframework" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-QQ-2.6.6" level="project" />
+    <orderEntry type="library" exported="" name="ShareSDK-QQ-2.4.2" level="project" />
+    <orderEntry type="library" exported="" name="ShareSDK-Wechat-2.4.2" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-ShortMessage-2.4.2" level="project" />
+    <orderEntry type="library" exported="" name="ShareSDK-Renren-2.4.2" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-TencentWeibo-2.4.2" level="project" />
     <orderEntry type="library" exported="" name="pushservice-4.6.0.68" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Core-2.6.6" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-SinaWeibo-2.6.6" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.4.2" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.3" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-SinaWeibo-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Wechat-Core-2.6.6" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-QZone-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-QQ-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-TencentWeibo-2.6.6" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-QZone-2.6.6" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Wechat-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="MobTools" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Renren-2.4.2" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.6.6" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-ShortMessage-2.6.6" level="project" />
     <orderEntry type="module" module-name="library" exported="" />
   </component>
 </module>

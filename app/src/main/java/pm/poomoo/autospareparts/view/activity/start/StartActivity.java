@@ -14,16 +14,17 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
-import pm.poomoo.autospareparts.view.activity.more.MyMessageActivity;
 import pm.poomoo.autospareparts.view.fragment.MainFragmentActivity;
 
 /**
@@ -32,6 +33,7 @@ import pm.poomoo.autospareparts.view.fragment.MainFragmentActivity;
 public class StartActivity extends PmBaseActivity {
 
     private final String TAG = StartActivity.class.getSimpleName();
+    private static String PATH = "/data/data/pm.poomoo.autospareparts/files";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
