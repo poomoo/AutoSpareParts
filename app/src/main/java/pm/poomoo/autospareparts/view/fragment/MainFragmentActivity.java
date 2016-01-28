@@ -71,18 +71,18 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
         ViewUtils.inject(this);
         PmApplication.getInstance().getShared().putBoolean(IS_NEED_GUIDE, true);//关闭引导界面
         init();
-        resource = getResources();
-        CustomPushNotificationBuilder cBuilder = new CustomPushNotificationBuilder(
-                resource.getIdentifier("notification_custom_builder", "layout", pkgName),
-                resource.getIdentifier("notification_icon", "id", pkgName),
-                resource.getIdentifier("notification_title", "id", pkgName),
-                resource.getIdentifier("notification_text", "id", pkgName));
-        cBuilder.setNotificationFlags(Notification.FLAG_AUTO_CANCEL);
-        cBuilder.setNotificationDefaults(Notification.DEFAULT_VIBRATE);
-        cBuilder.setStatusbarIcon(R.drawable.icon);
-        // 推送高级设置，通知栏样式设置为下面的ID
-        PushManager.setNotificationBuilder(this, 1, cBuilder);
-        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, "GMfmiNDGy4QcZ12leQa7Tr8L");//GMfmiNDGy4QcZ12leQa7Tr8L
+//        resource = getResources();
+//        CustomPushNotificationBuilder cBuilder = new CustomPushNotificationBuilder(
+//                resource.getIdentifier("notification_custom_builder", "layout", pkgName),
+//                resource.getIdentifier("notification_icon", "id", pkgName),
+//                resource.getIdentifier("notification_title", "id", pkgName),
+//                resource.getIdentifier("notification_text", "id", pkgName));
+//        cBuilder.setNotificationFlags(Notification.FLAG_AUTO_CANCEL);
+//        cBuilder.setNotificationDefaults(Notification.DEFAULT_VIBRATE);
+//        cBuilder.setStatusbarIcon(R.drawable.icon);
+//        // 推送高级设置，通知栏样式设置为下面的ID
+//        PushManager.setNotificationBuilder(this, 1, cBuilder);
+//        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, "GMfmiNDGy4QcZ12leQa7Tr8L");//GMfmiNDGy4QcZ12leQa7Tr8L
         showLog(TAG,"startWork END");
     }
 
