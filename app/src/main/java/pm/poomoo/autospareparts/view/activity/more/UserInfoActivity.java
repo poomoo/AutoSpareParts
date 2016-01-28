@@ -9,16 +9,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,6 +48,8 @@ import pm.poomoo.autospareparts.base.PmBaseActivity;
 import pm.poomoo.autospareparts.mode.ClientInfo;
 import pm.poomoo.autospareparts.util.RefreshableView;
 import pm.poomoo.autospareparts.view.activity.client.ClientInformationActivity;
+import pm.poomoo.autospareparts.view.activity.search.SearchAccessoriesActivity;
+import pm.poomoo.autospareparts.view.activity.search.SearchCompanyActivity;
 import pm.poomoo.autospareparts.view.activity.start.ForgetPasswordActivity;
 
 /**
@@ -58,13 +63,15 @@ public class UserInfoActivity extends PmBaseActivity {
     private ListView mListView;//列表
     @ViewInject(R.id.frag_two_linear)
     private LinearLayout mLinearlayout;
+    @ViewInject(R.id.company_list_search_company)
+    private EditText mEditSearContent;//查询到内容
 
     private myAdapter adapter;
-    private int mIndex = 1;//分页标记
+    private int mIndex = 0;//分页标记
     private boolean mIsComplete = true;//是否加载完成
     private boolean mIsAddMore = false;
     private List<ClientInfo> clientInfos = new ArrayList<>();//客户列表
-    private static String TAG = ForgetPasswordActivity.class.getSimpleName();
+    private static String TAG = UserInfoActivity.class.getSimpleName();
 
 
     @Override
@@ -88,13 +95,38 @@ public class UserInfoActivity extends PmBaseActivity {
             }
         });
 
+        adapter = new myAdapter(this);
+        mListView.setAdapter(adapter);
         onGetClientList(false);
+        setOnClickListener();
     }
 
     /**
      * 设置按钮点击监听
      */
     public void setOnClickListener() {
+
+        //软键盘上的搜索按钮点击
+        mEditSearContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                    String content = mEditSearContent.getText().toString().trim();
+                    if (!content.equals("")) {
+                        mEditSearContent.setText("");
+                        Intent intent = new Intent(UserInfoActivity.this, SearchAccessoriesActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("content", content);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        getActivityInFromRight();
+                    } else showToast("查询的内容不能为空");
+
+                }
+                return false;
+            }
+        });
+
         //列表点击事件
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -124,7 +156,7 @@ public class UserInfoActivity extends PmBaseActivity {
         refreshableView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                mIndex = 1;
+                mIndex = 0;
                 onGetClientList(true);
             }
         }, 0);
@@ -247,30 +279,23 @@ public class UserInfoActivity extends PmBaseActivity {
      */
     public void onGetClientList(final boolean isRefreshable) {
         mIsComplete = false;
+        showLog(TAG, "userId:" + PmApplication.getInstance().getShared().getInt(USER_ID));
         if (PmApplication.getInstance().getShared().getInt(USER_ID) == 0) {
             if (isRefreshable) {
                 refreshableView.finishRefreshing();
             }
             return;
         }
+        showLog(TAG, "IS_VIP:" + PmApplication.getInstance().getShared().getInt(IS_VIP));
         if (PmApplication.getInstance().getShared().getInt(IS_VIP) == 0) {
             return;
         }
         RequestParams params = new RequestParams();
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(KEY_PACKNAME, 1007);
-//            jsonObject.put("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID));
-//            jsonObject.put("index", mIndex);
-//            params.addBodyParameter(KEY, jsonObject.toString());
-//            showLog(TAG, jsonObject.toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        params.addBodyParameter(KEY_PACKNAME, 1007 + "");
         params.addBodyParameter("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
         params.addBodyParameter("index", mIndex + "");
 
-
+        showLog(TAG, "userId:" + PmApplication.getInstance().getShared().getInt(USER_ID) + "index:" + mIndex);
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {

@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class PmGlide extends RelativeLayout {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Log.i("广告", "handleMessage");
             mViewPager.setCurrentItem(msg.what);
         }
     };

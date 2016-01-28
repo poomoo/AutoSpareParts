@@ -11,5 +11,5 @@
         android:layout_width="105dp"
         android:layout_height="105dp"
         android:layout_gravity="center"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitXY" />
 </LinearLayout>

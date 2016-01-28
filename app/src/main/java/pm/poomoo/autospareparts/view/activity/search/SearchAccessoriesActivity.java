@@ -1,9 +1,7 @@
 package pm.poomoo.autospareparts.view.activity.search;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,7 +55,7 @@ public class SearchAccessoriesActivity extends PmBaseActivity {
     private ListView mListView;//列表
 
     private String mSearchContent = "";//搜索关键字
-    private int mIndex = 1;//分页标记
+    private int mIndex = 0;//分页标记
     private MyAdapter mAdapter;
     private List<ClientInfo> mClientInfos;
     private boolean mIsAddMore = false;
@@ -87,7 +85,7 @@ public class SearchAccessoriesActivity extends PmBaseActivity {
             }
         });
         mSearchContent = getIntent().getExtras().getString("content");
-        mClientInfos = new ArrayList<ClientInfo>();
+        mClientInfos = new ArrayList<>();
         mClientInfos.clear();
         mAdapter = new MyAdapter(SearchAccessoriesActivity.this);
         mListView.setAdapter(mAdapter);
@@ -127,7 +125,7 @@ public class SearchAccessoriesActivity extends PmBaseActivity {
         mRefreshableView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                mIndex = 1;
+                mIndex = 0;
                 onSearchClient(true);
             }
         }, 0);
@@ -247,19 +245,10 @@ public class SearchAccessoriesActivity extends PmBaseActivity {
     public void onSearchClient(final boolean isRefreshable) {
         mIsComplete = false;
         RequestParams params = new RequestParams();
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(KEY_PACKNAME, 1008);
-//            jsonObject.put("search_name", mSearchContent);
-//            jsonObject.put("index", mIndex);
-//            params.addBodyParameter(KEY, jsonObject.toString());
-//            showLog(TAG, jsonObject.toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        params.addBodyParameter(KEY_PACKNAME, 1008+"");
+        params.addBodyParameter(KEY_PACKNAME, 1008 + "");
         params.addBodyParameter("search_name", mSearchContent);
-        params.addBodyParameter("index", mIndex+"");
+        params.addBodyParameter("index", mIndex + "");
+        showLog(TAG, "search_name" + mSearchContent+" params"+params.toString());
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -278,8 +267,8 @@ public class SearchAccessoriesActivity extends PmBaseActivity {
                             if (array.length() > 0) {
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject object = new JSONObject(array.get(i).toString());
-                                    int typeId =  0;
-                                    if(!(object.get("type_id").toString()).equals("")){
+                                    int typeId = 0;
+                                    if (!(object.get("type_id").toString()).equals("")) {
                                         typeId = Integer.parseInt(object.get("type_id").toString());
                                     }
                                     mClientInfos.add(new ClientInfo(object.getInt("id"), typeId, object.getString("name"), object.getString("description"),

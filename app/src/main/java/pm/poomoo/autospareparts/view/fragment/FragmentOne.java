@@ -3,7 +3,6 @@ package pm.poomoo.autospareparts.view.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
@@ -26,17 +23,14 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
-import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLStreamHandler;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -45,19 +39,16 @@ import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.mode.CompanyInfo;
 import pm.poomoo.autospareparts.mode.MessageInfo;
-import pm.poomoo.autospareparts.mode.SupplyInfo;
 import pm.poomoo.autospareparts.mode.TypeInfo;
 import pm.poomoo.autospareparts.util.DateUtil;
 import pm.poomoo.autospareparts.util.PmGlide;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownElasticImp;
 import pm.poomoo.autospareparts.util.pullDownScrollView.PullDownScrollView;
-import pm.poomoo.autospareparts.view.activity.more.MyMessageInfoActivity;
-import pm.poomoo.autospareparts.view.activity.start.SupplyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyInformationActivity;
 import pm.poomoo.autospareparts.view.activity.company.CompanyListActivity;
-import pm.poomoo.autospareparts.view.custom.MyListView;
-import pm.poomoo.autospareparts.view.custom.MyListViewMainPager;
+import pm.poomoo.autospareparts.view.activity.more.MyMessageInfoActivity;
 import pm.poomoo.autospareparts.view.custom.NoScrollListView;
+import pm.poomoo.autospareparts.view.custom.bigimage.ImagePagerActivity;
 
 
 /**
@@ -115,7 +106,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         mTypePicHeight = mTypePicWidth;
 
         PmApplication.getInstance().getTypeInfos().clear();
-        getAdvertisement();//获取广告列表
+        getAdvertisement(false);//获取广告列表
         getTypeList(false);//获取类型
 
 
@@ -162,7 +153,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
      */
     @Override
     public void onRefresh(PullDownScrollView view) {
-        getAdvertisement();//下拉刷新广告
+        getAdvertisement(true);//下拉刷新广告
         getTypeList(true);//获取类型
         mIndex = 0;
         onGetMessageList(true);
@@ -257,7 +248,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
     /**
      * 获取广告接口
      */
-    public void getAdvertisement() {
+    public void getAdvertisement(final boolean refresh) {
         RequestParams params = new RequestParams();
 
         params.addBodyParameter(KEY_PACKNAME, "1001");
@@ -272,8 +263,11 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                     JSONObject result = new JSONObject(responseInfo.result);
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
+                            if (!refresh)
+                                mGlide.startAnimation();
+
                             advertisement.clear();
-                            mGlide.stopAnimation();
+//                            mGlide.stopAnimation();
                             JSONArray array = result.getJSONArray(KEY_LIST);
                             if (array.length() > 0) {
                                 String[] glide = new String[array.length()];
@@ -286,7 +280,6 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                                             object.getString("email"), "", 0, object.getString("people"), object.getString("wechat")));
                                 }
                                 mGlide.initPic(glide, getActivity());
-                                mGlide.startAnimation();
                             } else mGlide.setVisibility(View.GONE);
                             break;
                         case RET_FAIL:
@@ -494,10 +487,13 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
         private String[] Urls;
         private Context context;
+        private ArrayList<String> list = new ArrayList<>();
 
         public GridViewAdapter(Context context, String[] Urls) {
             this.Urls = Urls;
             this.context = context;
+            for (int i = 0; i < Urls.length; i++)
+                list.add(PIC_RUL + Urls[i].substring(2));
 
             if (bitmapUtils == null) {
                 bitmapUtils = new BitmapUtils(getActivity());
@@ -527,8 +523,33 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = View.inflate(context, R.layout.item_for_supply_gridview, null);
             ImageView imageView = (ImageView) view.findViewById(R.id.item_for_supply_imageView);
+//            ImageLoader.getInstance().displayImage(PIC_RUL + Urls[position].substring(2), imageView);
             bitmapUtils.display(imageView, PIC_RUL + Urls[position].substring(2));
+            imageView.setOnClickListener(new imgClickListener(position, list));
             return view;
+        }
+
+        public class imgClickListener implements View.OnClickListener {
+            int position;
+            ArrayList<String> list = new ArrayList<>();
+
+            public imgClickListener(int position, ArrayList<String> list) {
+                this.position = position;
+                this.list = list;
+            }
+
+            @Override
+            public void onClick(View v) {
+                imageBrowse(position, list);
+            }
+        }
+
+        protected void imageBrowse(int position, ArrayList<String> urls2) {
+            Intent intent = new Intent(getActivity(), ImagePagerActivity.class);
+            // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+            intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+            getActivity().startActivity(intent);
         }
     }
 }

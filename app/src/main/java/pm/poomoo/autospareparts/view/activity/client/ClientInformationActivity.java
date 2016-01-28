@@ -24,12 +24,15 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
 import pm.poomoo.autospareparts.util.PmGlide;
+import pm.poomoo.autospareparts.view.custom.bigimage.ImagePagerActivity;
 
 /**
  * 客户详细信息显示
@@ -86,6 +89,7 @@ public class ClientInformationActivity extends PmBaseActivity {
     private LinearLayout mLinearAddress;
 
     private boolean mIsCollect = false;//是否收藏
+    private ArrayList<String> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,17 +115,21 @@ public class ClientInformationActivity extends PmBaseActivity {
         });
 
         String[] array = PmApplication.getInstance().getShowClientInfo().get(0).getPic().split("[,]");
+        for (int i = 0; i < array.length; i++) {
+            array[i] = PIC_RUL + array[i].substring(2);
+            list.add(array[i]);
+        }
+
         mGlide.initPic(array, this);
         mGlide.startAnimation();
         mGlide.setPicClickListener(new PmGlide.picOnClickListener() {
             @Override
             public void onPicClick(int index) {
-
+                imageBrowse(index, list);
             }
         });
 
         onIsCollectCompany();//判断是否收藏
-
 
         mTxtClientName.setText(PmApplication.getInstance().getShowClientInfo().get(0).getName());
         mTxtExplain.setText("商家简介:" + PmApplication.getInstance().getShowClientInfo().get(0).getExplain());
@@ -458,6 +466,14 @@ public class ClientInformationActivity extends PmBaseActivity {
             }
         });
 
+    }
+
+    private void imageBrowse(int position, ArrayList<String> urls2) {
+        Intent intent = new Intent(this, ImagePagerActivity.class);
+        // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_URLS, urls2);
+        intent.putExtra(ImagePagerActivity.EXTRA_IMAGE_INDEX, position);
+        this.startActivity(intent);
     }
 
     @Override

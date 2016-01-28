@@ -58,7 +58,7 @@ public class SearchCompanyActivity extends PmBaseActivity {
 
     private boolean mIsComplete = true;//上次发送的获取数据包是否完成
     private boolean mIsAddMore = false;//是否加载更多
-    private int mIndex = 1;//分页标记
+    private int mIndex = 0;//分页标记
     private int mTypeId = -1;//类型id
     private String mSearchCompanyName = "";//查询的字符串
     private boolean mIsTrue = true;//true根据类型搜索   false搜索配件
@@ -94,7 +94,7 @@ public class SearchCompanyActivity extends PmBaseActivity {
         mIsTrue = getIntent().getExtras().getBoolean("isTrue");
         if (mIsTrue) {
             onSearchCompanyList(false);
-        }else{
+        } else {
             getCompanyList(false);
         }
 
@@ -110,10 +110,10 @@ public class SearchCompanyActivity extends PmBaseActivity {
         refreshableView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                mIndex = 1;
+                mIndex = 0;
                 if (mIsTrue) {
                     onSearchCompanyList(true);
-                }else{
+                } else {
                     getCompanyList(true);
                 }
             }
@@ -135,7 +135,7 @@ public class SearchCompanyActivity extends PmBaseActivity {
                 if (mIsAddMore && scrollState == 0 && mIsComplete) {
                     if (mIsTrue) {
                         onSearchCompanyList(false);
-                    }else{
+                    } else {
                         getCompanyList(false);
                     }
                 }
@@ -165,10 +165,10 @@ public class SearchCompanyActivity extends PmBaseActivity {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        params.addBodyParameter(KEY_PACKNAME, 1004+"");
-        params.addBodyParameter("type_id", mTypeId+"");
+        params.addBodyParameter(KEY_PACKNAME, 1004 + "");
+        params.addBodyParameter("type_id", mTypeId == -1 ? "" : (mTypeId + ""));
         params.addBodyParameter("company_name", mSearchCompanyName);
-        params.addBodyParameter("index", mIndex+"");
+        params.addBodyParameter("index", mIndex + "");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
@@ -188,7 +188,7 @@ public class SearchCompanyActivity extends PmBaseActivity {
                                 for (int i = 0; i < array.length(); i++) {
                                     JSONObject object = new JSONObject(array.get(i).toString());
                                     int typeId = 0;
-                                    if((object.get("type_id").toString()).equals("")){
+                                    if ((object.get("type_id").toString()).equals("")) {
                                         typeId = Integer.parseInt(object.get("type_id").toString());
                                     }
                                     companyList.add(new CompanyInfo(object.getInt("id"), typeId, object.getString("name"), object.getString("description"),
@@ -238,10 +238,10 @@ public class SearchCompanyActivity extends PmBaseActivity {
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-        params.addBodyParameter(KEY_PACKNAME, 1023+"");
+        params.addBodyParameter(KEY_PACKNAME, 1023 + "");
         params.addBodyParameter("name", mSearchCompanyName);
-        params.addBodyParameter("type_id", 18+"");
-        params.addBodyParameter("index", mIndex+"");
+        params.addBodyParameter("type_id", 18 + "");
+        params.addBodyParameter("index", mIndex + "");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
