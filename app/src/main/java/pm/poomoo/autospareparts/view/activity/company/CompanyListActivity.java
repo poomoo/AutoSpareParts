@@ -71,7 +71,7 @@ public class CompanyListActivity extends PmBaseActivity {
     private boolean mIsComplete = true;//加载数据是否完成
     private int mIndex = 1;//分页标记
     private List<CompanyInfo> advertisement = new ArrayList<CompanyInfo>();//广告
-    private List<CompanyInfo> companyList = new ArrayList<CompanyInfo>();//公司
+    private List<CompanyInfo> companyList = new ArrayList<>();//公司
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

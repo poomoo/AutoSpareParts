@@ -29,6 +29,8 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ import pm.poomoo.autospareparts.base.PmBaseActivity;
 import pm.poomoo.autospareparts.mode.ClientInfo;
 import pm.poomoo.autospareparts.mode.CompanyInfo;
 import pm.poomoo.autospareparts.util.RefreshableView;
+import pm.poomoo.autospareparts.view.activity.client.ClientInformationActivity;
+import pm.poomoo.autospareparts.view.activity.company.CompanyInformationActivity;
 
 /**
  * 我的收藏
@@ -56,12 +60,14 @@ public class MyCollectActivity extends PmBaseActivity {
     @ViewInject(R.id.my_collect_list)
     private ListView mListView;
 
-    private List<CompanyInfo> companyInfoList = new ArrayList<CompanyInfo>();//公司
-    private List<ClientInfo> clientInfos = new ArrayList<ClientInfo>();//客户
-    private List<CompanyInfo> showList = new ArrayList<CompanyInfo>();//显示的数据源
+    private List<CompanyInfo> companyInfoList = new ArrayList<>();//公司
+    private List<ClientInfo> clientInfos = new ArrayList<>();//客户
+    private List<CompanyInfo> showList = new ArrayList<>();//显示的数据源
     private int mIndexCompany = 0;//分页标记
     private int mIndexVip = 0;//分页标记
     private boolean isShowCompanyList = true;//true显示公司，false显示客户
+    private myAdapter adapter;
+    private myAdapter2 adapter2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +78,7 @@ public class MyCollectActivity extends PmBaseActivity {
         ViewUtils.inject(this);
         init();
         setOnClickListener();
+        showLog(TAG, "我的收藏");
     }
 
     /**
@@ -89,6 +96,9 @@ public class MyCollectActivity extends PmBaseActivity {
         });
 
         mIndexCompany = 0;
+        adapter = new myAdapter(this);
+        adapter2 = new myAdapter2(this);
+        mListView.setAdapter(adapter);
         onGetCollectCompanyList(false);//获取收藏公司列表
     }
 
@@ -96,12 +106,28 @@ public class MyCollectActivity extends PmBaseActivity {
      * 设置监听
      */
     public void setOnClickListener() {
+        //列表点击事件
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                PmApplication.getInstance().getShowCompanyInfos().clear();
+                if (isShowCompanyList) {
+                    PmApplication.getInstance().getShowCompanyInfos().add(companyInfoList.get(position));
+                    startActivity(new Intent(MyCollectActivity.this, CompanyInformationActivity.class));
+                } else {
+                    PmApplication.getInstance().getShowClientInfo().add(clientInfos.get(position));
+                    startActivity(new Intent(MyCollectActivity.this, ClientInformationActivity.class));
+                }
+                getActivityInFromRight();
+            }
+        });
         mTxtOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isShowCompanyList = true;
                 mTxtOne.setBackgroundColor(Color.parseColor("#ffb5b5b5"));
                 mTxtTwo.setBackgroundColor(Color.parseColor("#00000000"));
+                mListView.setAdapter(adapter);
                 //TODO 替换显示的数据结构
                 if (companyInfoList.size() == 0) {
                     onGetCollectCompanyList(false);
@@ -115,6 +141,7 @@ public class MyCollectActivity extends PmBaseActivity {
                 isShowCompanyList = false;
                 mTxtOne.setBackgroundColor(Color.parseColor("#00000000"));
                 mTxtTwo.setBackgroundColor(Color.parseColor("#ffb5b5b5"));
+                mListView.setAdapter(adapter2);
                 //TODO 替换显示的数据结构
                 if (clientInfos.size() == 0) {
                     onGetCollectVipList(false);
@@ -150,7 +177,7 @@ public class MyCollectActivity extends PmBaseActivity {
 
         @Override
         public int getCount() {
-            return showList.size();
+            return companyInfoList.size();
         }
 
         @Override
@@ -176,15 +203,72 @@ public class MyCollectActivity extends PmBaseActivity {
             } else {
                 holderView = (HolderView) convertView.getTag();
             }
-            holderView.name.setText(showList.get(position).getName());
-            holderView.explain.setText(showList.get(position).getExplain());
+            holderView.name.setText(companyInfoList.get(position).getName());
+            holderView.explain.setText(companyInfoList.get(position).getExplain());
 
             final int number = position;
             holderView.linearCall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //调用拨打电话界面
-                    choicePhoneNumberCall(number);
+                    choicePhoneNumberCall(true, number);
+                }
+            });
+            return convertView;
+        }
+
+        class HolderView {
+            public TextView name;
+            public TextView explain;
+            public LinearLayout linearCall;
+        }
+    }
+
+    public class myAdapter2 extends BaseAdapter {
+
+        private LayoutInflater inflater;
+
+        public myAdapter2(Context context) {
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return clientInfos.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            HolderView holderView;
+            if (convertView == null) {
+                holderView = new HolderView();
+                convertView = inflater.inflate(R.layout.item_for_company_list, null);
+                holderView.name = (TextView) convertView.findViewById(R.id.item_for_company_list_name);
+                holderView.explain = (TextView) convertView.findViewById(R.id.item_for_company_list_explain);
+                holderView.linearCall = (LinearLayout) convertView.findViewById(R.id.item_for_company_list_call);
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
+            holderView.name.setText(clientInfos.get(position).getName());
+            holderView.explain.setText(clientInfos.get(position).getExplain());
+
+            final int number = position;
+            holderView.linearCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //调用拨打电话界面
+                    choicePhoneNumberCall(false, number);
                 }
             });
             return convertView;
@@ -212,7 +296,7 @@ public class MyCollectActivity extends PmBaseActivity {
     /**
      * 弹出选择拨打电话界面
      */
-    public void choicePhoneNumberCall(final int number) {
+    public void choicePhoneNumberCall(boolean isShowCompanyList, final int number) {
         final Dialog dialog = new Dialog(MyCollectActivity.this, R.style.no_frame_dialog);
         dialog.setContentView(R.layout.dlg_choice_get_pic);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
@@ -227,8 +311,12 @@ public class MyCollectActivity extends PmBaseActivity {
         DialogAnimation(linearLayout, cancel);
 
         //        showList.get(number).getSpecialNumber();
-        final String[] phone = showList.get(number).getCellPhone().split("[@]");
-        listView.setAdapter(new ArrayAdapter<String>(MyCollectActivity.this, android.R.layout.simple_list_item_1, phone));
+        final String[] phone;
+        if (isShowCompanyList)
+            phone = companyInfoList.get(number).getCellPhone().split("[@]");
+        else
+            phone = clientInfos.get(number).getCellPhone().split("[@]");
+        listView.setAdapter(new ArrayAdapter<>(MyCollectActivity.this, android.R.layout.simple_list_item_1, phone));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -261,26 +349,45 @@ public class MyCollectActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(KEY_PACKNAME, 1011);
-//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-//            jsonObject.put("index", mIndexCompany);
-//            params.addBodyParameter(KEY, jsonObject.toString());
-//            showLog(TAG, jsonObject.toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         params.addBodyParameter(KEY_PACKNAME, "1011");
-        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID)+"");
-        params.addBodyParameter("index", mIndexCompany+"");
+        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("index", mIndexCompany + "");
+        params.addBodyParameter("type", "1");
+        showLog(TAG, "UserId:" + PmApplication.getInstance().getShared().getInt(USER_ID) + " mIndexCompany:" + mIndexCompany);
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 showLog(TAG, responseInfo.result);
-                if (isRefreshable) {
-                    refreshableView.finishRefreshing();
+                try {
+                    JSONObject result = new JSONObject(responseInfo.result);
+
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            if (isRefreshable) {
+                                refreshableView.finishRefreshing();
+                                companyInfoList.clear();
+                            }
+                            JSONArray array = result.getJSONArray(KEY_LIST);
+                            if (array.length() > 0) {
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = new JSONObject(array.get(i).toString());
+                                    companyInfoList.add(new CompanyInfo(object.getInt("id"), object.getInt("type"), object.getString("name"), object.getString("description"),
+                                            object.getString("pic"), object.getString("cellphone"), object.getString("landline"), object.getString("fax"), object.getString("qq"),
+                                            object.getString("email"), object.getString("address"), object.getLong("time"), object.getString("people"), object.getString("wechat")));
+                                }
+                                mIndexCompany++;
+                                adapter.notifyDataSetChanged();
+                            }
+                            break;
+                        case RET_FAIL:
+                            if (isRefreshable) {
+                                refreshableView.finishRefreshing();
+                            }
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -305,23 +412,44 @@ public class MyCollectActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(KEY_PACKNAME, 1012);
-            jsonObject.put("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID));
-            jsonObject.put("index", mIndexVip);
-            params.addBodyParameter(KEY, jsonObject.toString());
-            showLog(TAG, jsonObject.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        params.addBodyParameter(KEY_PACKNAME, "1012");
+        params.addBodyParameter("vip_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter("index", mIndexVip + "");
+        params.addBodyParameter("type", "2");
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override
             public void onSuccess(ResponseInfo<String> responseInfo) {
                 showLog(TAG, responseInfo.result);
-                if (isRefreshable) {
-                    refreshableView.finishRefreshing();
+                try {
+                    JSONObject result = new JSONObject(responseInfo.result);
+
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            if (isRefreshable) {
+                                refreshableView.finishRefreshing();
+                                clientInfos.clear();
+                            }
+                            JSONArray array = result.getJSONArray(KEY_LIST);
+                            if (array.length() > 0) {
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject object = new JSONObject(array.get(i).toString());
+                                    clientInfos.add(new ClientInfo(object.getInt("id"), object.getInt("type"), object.getString("name"), object.getString("description"),
+                                            object.getString("pic"), object.getString("cellphone"), object.getString("landline"), object.getString("fax"), object.getString("qq"),
+                                            object.getString("email"), object.getString("address"), object.getLong("time"), object.getString("people"), object.getString("wechat")));
+                                }
+                                mIndexVip++;
+                                adapter2.notifyDataSetChanged();
+                            }
+                            break;
+                        case RET_FAIL:
+                            if (isRefreshable) {
+                                refreshableView.finishRefreshing();
+                            }
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 

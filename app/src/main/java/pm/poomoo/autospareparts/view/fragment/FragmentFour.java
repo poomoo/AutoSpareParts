@@ -28,6 +28,7 @@ import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.util.MyUtil;
 import pm.poomoo.autospareparts.view.activity.more.ChangeUserInformationActivity;
+import pm.poomoo.autospareparts.view.activity.more.MyCollectActivity;
 import pm.poomoo.autospareparts.view.activity.more.ShareActivity;
 import pm.poomoo.autospareparts.view.activity.more.AboutMeActivity;
 import pm.poomoo.autospareparts.view.activity.more.FeedbackActivity;
@@ -111,7 +112,7 @@ public class FragmentFour extends PmBaseFragment {
                     showToast("请登录");
                     startActivity(new Intent(getActivity(), LogActivity.class));
                 } else {
-                    startActivity(new Intent(getActivity(), CollectFragmentActivity.class));
+                    startActivity(new Intent(getActivity(), MyCollectActivity.class));
                     getActivityInFromRight();
                 }
                 break;
