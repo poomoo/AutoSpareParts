@@ -370,19 +370,8 @@ public class ClientInformationActivity extends PmBaseActivity {
             return;
         }
         RequestParams params = new RequestParams();
-//        try {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put(KEY_PACKNAME, 1022);
-//            jsonObject.put("id", PmApplication.getInstance().getShared().getInt(USER_ID));
-//            jsonObject.put("company_id", PmApplication.getInstance().getShowClientInfo().get(0).getId());
-//            jsonObject.put("type", 2);
-//            params.addBodyParameter(KEY, jsonObject.toString());
-//            showLog(TAG, jsonObject.toString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        params.addBodyParameter(KEY_PACKNAME, "1022");
-        params.addBodyParameter("id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
+        params.addBodyParameter(KEY_PACKNAME, "1030 ");
+        params.addBodyParameter("user_id", PmApplication.getInstance().getShared().getInt(USER_ID) + "");
         params.addBodyParameter("company_id", PmApplication.getInstance().getShowClientInfo().get(0).getId() + "");
         params.addBodyParameter("type", 2 + "");
 
@@ -394,14 +383,15 @@ public class ClientInformationActivity extends PmBaseActivity {
                     JSONObject result = new JSONObject(responseInfo.result);
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
-                            //没有收藏
-                            mIsCollect = false;
-                            mTxtCollect.setText("收藏");
-                            break;
-                        case 1:
-                            //已经收藏
-                            mIsCollect = true;
-                            mTxtCollect.setText("取消收藏");
+                            if (result.getInt("code") == 0) {
+                                //没有收藏
+                                mIsCollect = false;
+                                mTxtCollect.setText("收藏");
+                            } else {
+                                //已经收藏
+                                mIsCollect = true;
+                                mTxtCollect.setText("取消收藏");
+                            }
                             break;
                         case RET_FAIL:
                             break;
@@ -416,6 +406,7 @@ public class ClientInformationActivity extends PmBaseActivity {
             }
         });
     }
+
 
     /**
      * 取消收藏客户
