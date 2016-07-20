@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -44,7 +45,8 @@ public class StartActivity extends PmBaseActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         PmApplication.getInstance().setScreenWidth(dm.widthPixels);
         PmApplication.getInstance().setScreenHeight(dm.heightPixels);
-        checkVersion();
+//        checkVersion();
+        startTimer();
     }
 
     private Timer mTimer;
@@ -92,6 +94,7 @@ public class StartActivity extends PmBaseActivity {
         params.addBodyParameter(KEY_PACKNAME, "1014");
         params.addBodyParameter("system_type", "0");
         params.addBodyParameter("version_number", getVersionName());
+        Log.d(TAG, "getVersionName():" + getVersionName());
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override

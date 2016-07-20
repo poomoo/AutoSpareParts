@@ -1,6 +1,7 @@
 package pm.poomoo.autospareparts.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import pm.poomoo.autospareparts.R;
+import pm.poomoo.autospareparts.view.activity.start.LogActivity;
 
 
 /**
@@ -71,6 +73,8 @@ public class BottomBar extends LinearLayout implements OnClickListener {
                 break;
             case R.id.linear_two:
                 onItemChangedListener.onItemChanged(1);
+                if (!MyUtil.isLogin())
+                    return;
                 cancelLinearBackground(1);
                 break;
             case R.id.linear_three:
@@ -79,6 +83,8 @@ public class BottomBar extends LinearLayout implements OnClickListener {
                 break;
             case R.id.linear_four:
                 onItemChangedListener.onItemChanged(3);
+                if (!MyUtil.isLogin())
+                    return;
                 cancelLinearBackground(3);
                 break;
             case R.id.linear_five:

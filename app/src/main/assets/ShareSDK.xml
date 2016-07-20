@@ -59,8 +59,14 @@
         Id="2" RedirectUri="http://sharesdk.cn" SortId="2" />
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
-    <QZone AppId="100371282" AppKey="aed9b0303e3ed1e27bae87c33761161d" Enable="true" Id="3"
-        ShareByAppClient="true" SortId="3" />
+    <!--<QZone AppId="100371282" AppKey="aed9b0303e3ed1e27bae87c33761161d" Enable="true" Id="3"-->
+    <!--ShareByAppClient="true" SortId="3" />-->
+    <QZone AppId="1103373034" AppKey="Pqfnt2UsO9vAuqhH" Enable="true" Id="3" ShareByAppClient="true"
+        SortId="3" />
+
+    <!--<Wechat AppId="wx8360e50b84d3e8fb" BypassApproval="true" Enable="true" Id="4" SortId="4" />-->
+    <!--<WechatMoments AppId="wx8360e50b84d3e8fb" BypassApproval="true" Enable="true" Id="5"        SortId="5" />-->
+    <!--<WechatFavorite AppId="wx8360e50b84d3e8fb" Enable="true" Id="6" SortId="6" />-->
 
     <Wechat AppId="wx8360e50b84d3e8fb" BypassApproval="false" Enable="true" Id="4" SortId="4" />
 
@@ -68,16 +74,13 @@
         SortId="5" />
 
     <WechatFavorite AppId="wx8360e50b84d3e8fb" Enable="true" Id="6" SortId="6" />
-    <!--<Wechat AppId="wx8360e50b84d3e8fb" Enable="true" Id="4" ShareByAppClient="true" SortId="4" />-->
 
-    <!--<WechatMoments AppId="wx8360e50b84d3e8fb" Enable="true" Id="5" ShareByAppClient="true"-->
-    <!--SortId="5" />-->
-
-    <!--<WechatFavorite AppId="wx8360e50b84d3e8fb" Enable="true" Id="6" SortId="6" />-->
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
-    <QQ AppId="100371282" AppKey="aed9b0303e3ed1e27bae87c33761161d" Enable="true" Id="7"
-        ShareByAppClient="true" SortId="7" />
+    <!--<QQ AppId="100371282" AppKey="aed9b0303e3ed1e27bae87c33761161d" Enable="true" Id="7"-->
+    <!--ShareByAppClient="true" SortId="7" />-->
+    <QQ AppId="1103373034" AppKey="Pqfnt2UsO9vAuqhH" Enable="true" Id="7" ShareByAppClient="true"
+        SortId="7" />
 
     <Facebook ConsumerKey="107704292745179" ConsumerSecret="38053202e1a5fe26c80c753071f0b573"
         Enable="true" Id="8" SortId="8" />

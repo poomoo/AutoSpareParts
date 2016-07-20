@@ -17,7 +17,7 @@ import pm.poomoo.autospareparts.base.PmBaseFragment;
 
 
 /**
- * 客户资料
+ * 消息中心
  *
  * @author AADC
  */

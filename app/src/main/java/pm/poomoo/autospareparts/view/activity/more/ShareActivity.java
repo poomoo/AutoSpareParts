@@ -36,7 +36,7 @@ import pm.poomoo.autospareparts.base.PmBaseActivity;
  */
 public class ShareActivity extends PmBaseActivity {
     private Bitmap bitmap;
-    private String weburl = "http://www.gyqphy.com/auto/";
+    private String weburl = "http://www.gyqphy.com";
     private String path;
 
     @Override

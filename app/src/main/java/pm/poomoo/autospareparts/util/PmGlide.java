@@ -51,7 +51,7 @@ public class PmGlide extends RelativeLayout {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.i("广告", "handleMessage");
+//            Log.i("广告", "handleMessage");
             mViewPager.setCurrentItem(msg.what);
         }
     };

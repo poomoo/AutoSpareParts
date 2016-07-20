@@ -83,7 +83,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
 //        // 推送高级设置，通知栏样式设置为下面的ID
 //        PushManager.setNotificationBuilder(this, 1, cBuilder);
 //        PushManager.startWork(getApplicationContext(), PushConstants.LOGIN_TYPE_API_KEY, "GMfmiNDGy4QcZ12leQa7Tr8L");//GMfmiNDGy4QcZ12leQa7Tr8L
-        showLog(TAG,"startWork END");
+        showLog(TAG, "startWork END");
     }
 
     /**
@@ -140,6 +140,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
                         if (!MyUtil.isLogin()) {
                             showToast("请登录");
                             startActivity(new Intent(MainFragmentActivity.this, LogActivity.class));
+                            return;
                         }
                         mRelativeOne.setVisibility(View.GONE);
                         mRelativeTwo.setVisibility(View.VISIBLE);
@@ -150,6 +151,7 @@ public class MainFragmentActivity extends PmBaseFragmentActivity {
                         if (!MyUtil.isLogin()) {
                             showToast("请登录");
                             startActivity(new Intent(MainFragmentActivity.this, LogActivity.class));
+                            return;
                         }
                         mRelativeOne.setVisibility(View.GONE);
                         mRelativeTwo.setVisibility(View.GONE);
