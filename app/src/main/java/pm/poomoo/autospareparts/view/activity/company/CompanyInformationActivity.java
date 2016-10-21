@@ -94,6 +94,7 @@ public class CompanyInformationActivity extends PmBaseActivity {
     private ArrayList<String> picUrls = new ArrayList<>();
 
     private String weburl = "http://www.gyqphy.com";
+    private String text = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,8 @@ public class CompanyInformationActivity extends PmBaseActivity {
         else
             mTxtCompanyName.setText(PmApplication.getInstance().getShowCompanyInfos().get(0).getName());
 
+        text = PmApplication.getInstance().getShowCompanyInfos().get(0).getName() + "\n";
+
         mTxtExplain.setText("商家简介:" + PmApplication.getInstance().getShowCompanyInfos().get(0).getExplain());
 
         if (TextUtils.isEmpty(PmApplication.getInstance().getShowCompanyInfos().get(0).getContact()))
@@ -163,6 +166,7 @@ public class CompanyInformationActivity extends PmBaseActivity {
         String phoneNumber = PmApplication.getInstance().getShowCompanyInfos().get(0).getCellPhone();
         final String[] phone = phoneNumber.split("[@]");
         for (int i = 0; i < phone.length; i++) {
+            text += phone[i] + "\n";
             switch (i) {
                 case 0:
                     mTxtPhoneNumberOne.setVisibility(View.VISIBLE);
@@ -222,6 +226,7 @@ public class CompanyInformationActivity extends PmBaseActivity {
                     break;
             }
         }
+        text = text.substring(0, text.length() - 1);
 
         if (TextUtils.isEmpty(PmApplication.getInstance().getShowCompanyInfos().get(0).getQQ()))
             mLinearQQ.setVisibility(View.GONE);
@@ -272,20 +277,20 @@ public class CompanyInformationActivity extends PmBaseActivity {
                 //关闭sso授权
                 oks.disableSSOWhenAuthorize();
                 // 分享时Notification的图标和文字
-                oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+//                oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
                 // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
                 oks.setTitle(getString(R.string.app_name));
                 // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-                oks.setTitleUrl(weburl);
+//                oks.setTitleUrl(weburl);
                 // text是分享文本，所有平台都需要这个字段
-                oks.setText(SHARE_TEXT);
+                oks.setText(text);
                 // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-                oks.setUrl(weburl);
+//                oks.setUrl(weburl);
                 // site是分享此内容的网站名称，仅在QQ空间使用
-                oks.setSite(getString(R.string.app_name));
+//                oks.setSite(getString(R.string.app_name));
                 // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-                oks.setSiteUrl(weburl);
-                oks.setImagePath(Environment.getExternalStorageDirectory() + "/icon.jpg");
+//                oks.setSiteUrl(weburl);
+//                oks.setImagePath(Environment.getExternalStorageDirectory() + "/icon.jpg");
                 // 启动分享GUI
                 oks.show(this);
                 break;
