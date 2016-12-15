@@ -37,6 +37,8 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.config.PmConfig;
 import pm.poomoo.autospareparts.config.PmNetWorkInterface;
 
+import static pm.poomoo.autospareparts.base.PmApplication.showLog;
+
 
 /**
  * 所有activity基类
@@ -221,6 +223,7 @@ public class PmBaseActivity extends Activity implements PmNetWorkInterface, PmCo
      * @param content 内容
      */
     protected void showLog(String Tag, String content) {
+        if(showLog)
         Log.i(Tag, LOG_PREFIX + "-------------------->" + content);
     }
 
@@ -230,6 +233,7 @@ public class PmBaseActivity extends Activity implements PmNetWorkInterface, PmCo
      * @param content 内容
      */
     protected void showLog(String content) {
+        if(showLog)
         Log.i("a", LOG_PREFIX + "-------------------->" + content);
     }
 

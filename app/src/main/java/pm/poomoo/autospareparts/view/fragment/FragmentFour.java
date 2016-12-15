@@ -1,13 +1,11 @@
 package pm.poomoo.autospareparts.view.fragment;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +26,14 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.util.MyUtil;
-import pm.poomoo.autospareparts.view.activity.more.ChangeUserInformationActivity;
-import pm.poomoo.autospareparts.view.activity.more.MyCollectActivity;
-import pm.poomoo.autospareparts.view.activity.more.ShareActivity;
 import pm.poomoo.autospareparts.view.activity.more.AboutMeActivity;
+import pm.poomoo.autospareparts.view.activity.more.ChangeUserInformationActivity;
 import pm.poomoo.autospareparts.view.activity.more.FeedbackActivity;
+import pm.poomoo.autospareparts.view.activity.more.MyCollectActivity;
 import pm.poomoo.autospareparts.view.activity.more.MyMessageActivity;
+import pm.poomoo.autospareparts.view.activity.more.ShareActivity;
 import pm.poomoo.autospareparts.view.activity.more.SoftwareExplainActivity;
 import pm.poomoo.autospareparts.view.activity.more.UserInfoActivity;
-import pm.poomoo.autospareparts.view.activity.more.collect.CollectFragmentActivity;
 import pm.poomoo.autospareparts.view.activity.start.LogActivity;
 import pm.poomoo.autospareparts.view.activity.start.RegisterActivity;
 
@@ -81,7 +78,7 @@ public class FragmentFour extends PmBaseFragment {
     }
 
     private void isLogin() {
-        Log.i(TAG, "isLogin:" + PmApplication.getInstance().getShared().getBoolean("isLogin"));
+        showLog(TAG, "isLogin:" + PmApplication.getInstance().getShared().getBoolean("isLogin"));
         if (PmApplication.getInstance().getShared().getBoolean("isLogin", false))
             temp = "注销";
         else
@@ -315,7 +312,7 @@ public class FragmentFour extends PmBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume");
+        showLog(TAG, "onResume");
         isLogin();
     }
 }

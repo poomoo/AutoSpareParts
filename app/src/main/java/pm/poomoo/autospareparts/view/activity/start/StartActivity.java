@@ -26,7 +26,10 @@ import java.util.TimerTask;
 import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.base.PmApplication;
 import pm.poomoo.autospareparts.base.PmBaseActivity;
+import pm.poomoo.autospareparts.base.PmBaseFragment;
 import pm.poomoo.autospareparts.view.fragment.MainFragmentActivity;
+
+import static pm.poomoo.autospareparts.base.PmApplication.showLog;
 
 /**
  * 启动界面
@@ -47,6 +50,7 @@ public class StartActivity extends PmBaseActivity {
         PmApplication.getInstance().setScreenHeight(dm.heightPixels);
         checkVersion();
 //        startTimer();
+        showLog = false;//不显示日志
     }
 
     private Timer mTimer;
@@ -94,7 +98,6 @@ public class StartActivity extends PmBaseActivity {
         params.addBodyParameter(KEY_PACKNAME, "1014");
         params.addBodyParameter("system_type", "0");
         params.addBodyParameter("version_number", getVersionName());
-        Log.d(TAG, "getVersionName():" + getVersionName());
 
         new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
             @Override

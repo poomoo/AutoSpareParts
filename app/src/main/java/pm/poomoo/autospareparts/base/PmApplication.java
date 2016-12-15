@@ -38,6 +38,8 @@ public class PmApplication extends Application implements PmNetWorkInterface, Pm
     private List<CompanyInfo> showCompanyInfo;//显示公司详细信息
     private List<ClientInfo> showClientInfo;//显示客户详细信息
 
+    public static boolean showLog = true;//是否显示Log日志
+
     public PmApplication() {
         super();
     }

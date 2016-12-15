@@ -22,6 +22,8 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.config.PmConfig;
 import pm.poomoo.autospareparts.config.PmNetWorkInterface;
 
+import static pm.poomoo.autospareparts.base.PmApplication.showLog;
+
 
 public class PmBaseFragmentActivity extends FragmentActivity implements PmConfig, PmNetWorkInterface {
     // 等待操作的对话框
@@ -67,7 +69,8 @@ public class PmBaseFragmentActivity extends FragmentActivity implements PmConfig
      * @param content 日志内容
      */
     protected void showLog(String Tag, String content) {
-        Log.i(Tag, PmConfig.LOG_PREFIX + "-------------------->" + content);
+        if (showLog)
+            Log.i(Tag, PmConfig.LOG_PREFIX + "-------------------->" + content);
     }
 
     // =============================下面是判断是否需要引导界面===========================

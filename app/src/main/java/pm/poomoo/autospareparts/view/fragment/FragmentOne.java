@@ -163,7 +163,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
      * 加载子视图
      */
     public void initChildView() {
-        Log.i(TAG, "initChildView开始");
+        showLog(TAG, "initChildView开始");
         mLinearLayout.removeAllViews();
         int n = -1;
         //计算有多少行
@@ -171,16 +171,16 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
         if (PmApplication.getInstance().getTypeInfos().size() % 2 == 0)
             maxLine = PmApplication.getInstance().getTypeInfos().size() / 2;
         else maxLine = PmApplication.getInstance().getTypeInfos().size() / 2 + 1;
-        Log.i(TAG, "initChildView-- maxLine" + maxLine);
+        showLog(TAG, "initChildView-- maxLine" + maxLine);
         //循环所有行，并且取得每行的控件
         for (int i = 0; i < maxLine; i++) {
-            Log.i(TAG, "initChildView-- 循环开始" + i);
+            showLog(TAG, "initChildView-- 循环开始" + i);
             //得到子视图第一个视图控件
             n++;
             LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.item_for_fragment_one_scroll, null);
             LinearLayout linearOne = (LinearLayout) linearLayout.findViewById(R.id.item_for_fragment_one_linear_one);
             ImageView imageViewOne = (ImageView) linearLayout.findViewById(R.id.item_for_fragment_one_pic_one);
-            Log.i(TAG, "initChildView-- 循环进行中" + n);
+            showLog(TAG, "initChildView-- 循环进行中" + n);
             ViewGroup.LayoutParams params = imageViewOne.getLayoutParams();
             params.width = mTypePicWidth;
             params.height = mTypePicHeight;
@@ -189,7 +189,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
             TextView textViewExplainOne = (TextView) linearLayout.findViewById(R.id.item_for_fragment_one_explain_one);
 
             getBitmap(imageViewOne, PmApplication.getInstance().getTypeInfos().get(n).getPicPath());
-            Log.i(TAG, "initChildView-- 循环进行中 getBitmap：" + PmApplication.getInstance().getTypeInfos().get(n).getPicPath());
+            showLog(TAG, "initChildView-- 循环进行中 getBitmap：" + PmApplication.getInstance().getTypeInfos().get(n).getPicPath());
             textViewNameOne.setText(PmApplication.getInstance().getTypeInfos().get(n).getName());
             textViewExplainOne.setText(PmApplication.getInstance().getTypeInfos().get(n).getExplain());
             final int numberOne = n;
@@ -199,7 +199,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                     skipActivity(numberOne);
                 }
             });
-            Log.i(TAG, "initChildView-- 第一个视图控件" + i);
+            showLog(TAG, "initChildView-- 第一个视图控件" + i);
             //得到子视图第二个视图控件(首先要判断是否要显示)
             n++;
             if (n < PmApplication.getInstance().getTypeInfos().size()) {
@@ -224,11 +224,11 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
                     }
                 });
             }
-            Log.i(TAG, "initChildView-- 第二个视图控件" + i);
+            showLog(TAG, "initChildView-- 第二个视图控件" + i);
             mLinearLayout.addView(linearLayout);
-            Log.i(TAG, "initChildView-- 循环结束" + i);
+            showLog(TAG, "initChildView-- 循环结束" + i);
         }
-        Log.i(TAG, "initChildView结束");
+        showLog(TAG, "initChildView结束");
     }
 
     /**
@@ -350,7 +350,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
      * 获取消息列表
      */
     public void onGetMessageList(final boolean isRefreshable) {
-        Log.i(TAG, "onGetMessageList------");
+        showLog(TAG, "onGetMessageList------");
         RequestParams params = new RequestParams();
         params.addBodyParameter(KEY_PACKNAME, "1013");
         params.addBodyParameter("index", mIndex + "");
@@ -404,7 +404,7 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.i(TAG, "点击系统消息");
+        showLog(TAG, "点击系统消息");
         Intent intent = new Intent(getActivity(), MyMessageInfoActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("title", messageInfos.get(i).getTitle());
@@ -457,9 +457,9 @@ public class FragmentOne extends PmBaseFragment implements PullDownScrollView.Re
 //            showLog(TAG, "position:" + position + messageInfos.get(position).toString());
             holderView.title.setText(messageInfos.get(position).getTitle());
 //            Calendar calendar = Calendar.getInstance();
-//            Log.i(TAG, "当前日期:" + calendar.getTime());
+//            showLog(TAG, "当前日期:" + calendar.getTime());
 //            calendar.setTimeInMillis(messageInfos.get(position).getTime());
-//            Log.i(TAG, "时间:" + calendar.getTimeInMillis() + "  日历:" + calendar.getTime());
+//            showLog(TAG, "时间:" + calendar.getTimeInMillis() + "  日历:" + calendar.getTime());
             holderView.dateTime.setText(DateUtil.getDateWith10Time(messageInfos.get(position).getTime()));
             holderView.content.setText(messageInfos.get(position).getContent());
             Urls = messageInfos.get(position).getPictures().split(",");

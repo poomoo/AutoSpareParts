@@ -24,6 +24,8 @@ import pm.poomoo.autospareparts.R;
 import pm.poomoo.autospareparts.config.PmConfig;
 import pm.poomoo.autospareparts.config.PmNetWorkInterface;
 
+import static pm.poomoo.autospareparts.base.PmApplication.showLog;
+
 
 public class PmBaseFragment extends Fragment implements PmNetWorkInterface, PmConfig {
 
@@ -94,7 +96,8 @@ public class PmBaseFragment extends Fragment implements PmNetWorkInterface, PmCo
      * @param content
      */
     protected void showLog(String Tag, String content) {
-        Log.i(Tag, PmConfig.LOG_PREFIX + "-------------------->" + content);
+        if (showLog)
+            Log.i(Tag, PmConfig.LOG_PREFIX + "-------------------->" + content);
     }
 
     // =============================下面是提示对话框======================================
