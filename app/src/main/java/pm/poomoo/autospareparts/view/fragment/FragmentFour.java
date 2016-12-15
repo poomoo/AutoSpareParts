@@ -21,6 +21,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import pm.poomoo.autospareparts.R;
@@ -138,6 +139,13 @@ public class FragmentFour extends PmBaseFragment {
                     showToast("请登录");
                     startActivity(new Intent(getActivity(), LogActivity.class));
                 } else {
+                    if (PmApplication.getInstance().getShared().getInt(IS_VIP) == 0) {
+                        showToast("你不是VIP，不能查看客户资料");
+                        return;
+                    } else if (PmApplication.getInstance().getShared().getInt(IS_VIP) == 2) {
+                        checkVip();
+                        return;
+                    }
                     startActivity(new Intent(getActivity(), UserInfoActivity.class));
                     getActivityInFromRight();
                 }
@@ -203,6 +211,50 @@ public class FragmentFour extends PmBaseFragment {
         intent.putExtras(bundle);
         startActivity(intent);
         getActivityInFromRight();
+    }
+
+    public void checkVip() {
+        RequestParams params = new RequestParams();
+
+        params.addBodyParameter(KEY_PACKNAME, "1018");
+        params.addBodyParameter("phone_number", PmApplication.getInstance().getShared().getString(TEL));
+        params.addBodyParameter("password", PmApplication.getInstance().getShared().getString(PASSWORD));
+
+        showLoadingDialog("查询用户状态中...");
+        new HttpUtils().configTimeout(TIME_OUT).send(HttpRequest.HttpMethod.POST, URL, params, new RequestCallBack<String>() {
+            @Override
+            public void onSuccess(ResponseInfo<String> responseInfo) {
+                showLog(TAG, responseInfo.result);
+                try {
+                    JSONObject result = new JSONObject(responseInfo.result);
+                    switch (result.getInt(KEY_RESULT)) {
+                        case RET_SUCCESS:
+                            JSONObject userInfo = new JSONObject(result.getString("userinfo"));
+                            PmApplication.getInstance().getShared().putInt(IS_VIP, userInfo.getInt("isvip"));//0是会员  1是vip
+                            if (userInfo.getInt("isvip") == 2)
+                                showDismissLoadingDialog("VIP正在审核中，不能查看客户资料", false);
+                            else if (userInfo.getInt("isvip") == 0)
+                                showDismissLoadingDialog("VIP审核未通过，不能查看客户资料", false);
+                            else {
+                                showDismissLoadingDialog("审核通过", true);
+                                startActivity(new Intent(getActivity(), UserInfoActivity.class));
+                                getActivityInFromRight();
+                            }
+                            break;
+                        case RET_FAIL:
+                            showDismissLoadingDialog(result.getString("msg"), false);
+                            break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                showDismissLoadingDialog("网络错误", false);
+            }
+        });
     }
 
     /**

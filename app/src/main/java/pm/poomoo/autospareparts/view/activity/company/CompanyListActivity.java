@@ -69,7 +69,7 @@ public class CompanyListActivity extends PmBaseActivity {
     private int mTypeNumber = -1;
     private boolean mIsAddMore = false;
     private boolean mIsComplete = true;//加载数据是否完成
-    private int mIndex = 1;//分页标记
+    private int mIndex = 0;//分页标记
     private List<CompanyInfo> advertisement = new ArrayList<CompanyInfo>();//广告
     private List<CompanyInfo> companyList = new ArrayList<>();//公司
 
@@ -129,7 +129,7 @@ public class CompanyListActivity extends PmBaseActivity {
         refreshableView.setOnRefreshListener(new RefreshableView.PullToRefreshListener() {
             @Override
             public void onRefresh() {
-                mIndex = 1;
+                mIndex =0;
                 getCompanyList(true);
             }
         }, 0);

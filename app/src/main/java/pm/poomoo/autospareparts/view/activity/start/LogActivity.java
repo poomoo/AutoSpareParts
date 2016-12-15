@@ -102,7 +102,7 @@ public class LogActivity extends PmBaseActivity {
      * @param phoneNumber 用户名
      * @param password    密码
      */
-    public void logIn(final String phoneNumber, String password) {
+    public void logIn(final String phoneNumber, final String password) {
         RequestParams params = new RequestParams();
 //        try {
 //            JSONObject jsonObject = new JSONObject();
@@ -134,11 +134,12 @@ public class LogActivity extends PmBaseActivity {
                             PmApplication.getInstance().getShared().putInt(USER_ID, userInfo.getInt("id"));
                             PmApplication.getInstance().getShared().putInt(IS_VIP, userInfo.getInt("isvip"));//0是会员  1是vip
                             PmApplication.getInstance().getShared().putString(TEL, phoneNumber);//电话号码
+                            PmApplication.getInstance().getShared().putString(PASSWORD, MD5(password));//密码
                             PmApplication.getInstance().getShared().putBoolean("isLogin", true);//登录状态
                             goBackLastActivity();
                             break;
                         case RET_FAIL:
-                            showDismissLoadingDialog("登录失败", false);
+                            showDismissLoadingDialog(result.getString("msg"), false);
                             break;
                     }
                 } catch (JSONException e) {

@@ -41,6 +41,8 @@ public interface PmConfig {
     public static final String IS_VIP = "isVip";
     //手机号
     public static final String TEL = "tel";
+    //密码
+    public static final String PASSWORD = "passWord";
     //姓名
     public static final String NAME = "name";
     //分享文本

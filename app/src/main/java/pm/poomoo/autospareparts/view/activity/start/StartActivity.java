@@ -45,8 +45,8 @@ public class StartActivity extends PmBaseActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         PmApplication.getInstance().setScreenWidth(dm.widthPixels);
         PmApplication.getInstance().setScreenHeight(dm.heightPixels);
-//        checkVersion();
-        startTimer();
+        checkVersion();
+//        startTimer();
     }
 
     private Timer mTimer;
@@ -105,6 +105,7 @@ public class StartActivity extends PmBaseActivity {
                     switch (result.getInt(KEY_RESULT)) {
                         case RET_SUCCESS:
                             final String downAddress = result.getString("down_address");
+//                            final String downAddress = "http://a.app.qq.com/o/simple.jsp?pkgname=pm.poomoo.autospareparts";
                             if (!downAddress.equals("")) {
                                 new AlertDialog.Builder(StartActivity.this).setTitle("提示").setMessage("检测到最新版，是否更新").setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
